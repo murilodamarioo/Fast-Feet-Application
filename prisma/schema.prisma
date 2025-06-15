@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  COURIER
+}
+
+model User {
+  id       String  @id @default(uuid())
+  name     String
+  cpf      String  @unique
+  password String
+  role     Role    @default(COURIER)
+  orders   Order[]
+
+  @@map("users")
+}
+
+model Recipient {
+  id           String  @id @default(uuid())
+  name         String
+  cpf          String
+  email        String  @unique
+  phone        String
+  zipCode      String  @map("zip_code")
+  address      String
+  neighborhood String
+  state        String
+  orders       Order[]
+
+  @@map("recipients")
+}
+
+enum OrderStatus {
+  CREATED
+  PENDING
+  PICKED_UP
+  DELIVERED
+  RETURNED
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  status      OrderStatus
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime?   @updatedAt @map("updated_at")
+  recipientId String      @map("recipient_id")
+  userId      String?     @map("courier_id")
+
+  recipient Recipient @relation(fields: [recipientId], references: [id])
+  courier   User?     @relation(fields: [userId], references: [id])
+  photo     Photo[]
+
+  @@map("orders")
+}
+
+model Photo {
+  id   String @id @default(uuid())
+  name String
+  url  String
+  orderId String? @unique @map("order_id")
+
+  order   Order?  @relation(fields: [orderId], references: [id])
+
+  @@map("photos")
+}
