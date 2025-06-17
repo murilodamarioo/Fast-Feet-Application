@@ -1,3 +1,5 @@
+import { CurrentUser } from '@/auth/current-user-decorator'
+import { UserPayload } from '@/auth/jwt.strategy'
 import { PrismaService } from '@/prisma/prisma.service'
 import { Controller, HttpCode, Post, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
@@ -11,7 +13,7 @@ export class CreateOrderController {
 
   @Post()
   @HttpCode(201)
-  async handle() {
+  async handle(@CurrentUser() user: UserPayload) {
     return 'OK'
   }
 
