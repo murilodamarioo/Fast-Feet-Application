@@ -60,3 +60,6 @@ data
 
 # Database
 generated
+
+private_key.pem
+public_key.pem
