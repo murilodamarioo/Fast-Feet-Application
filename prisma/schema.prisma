@@ -49,14 +49,15 @@ enum OrderStatus {
 
 model Order {
   id          String      @id @default(uuid())
-  status      OrderStatus
+  title       String
+  status      OrderStatus @default(CREATED)
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime?   @updatedAt @map("updated_at")
   recipientId String      @map("recipient_id")
-  userId      String?     @map("courier_id")
+  courierId      String?     @map("courier_id")
 
   recipient Recipient @relation(fields: [recipientId], references: [id])
-  courier   User?     @relation(fields: [userId], references: [id])
+  courier   User?     @relation(fields: [courierId], references: [id])
   photo     Photo[]
 
   @@map("orders")
