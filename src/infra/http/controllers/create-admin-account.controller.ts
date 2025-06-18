@@ -1,8 +1,8 @@
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe';
-import { PrismaService } from '@/infra/database/prisma/prisma.service';
-import { Body, ConflictException, Controller, HttpCode, Post, UsePipes } from '@nestjs/common'
-import { hash } from 'bcryptjs'
-import { string, z } from 'zod'
+import { BadRequestException, Body, ConflictException, Controller, HttpCode, Post, UsePipes } from '@nestjs/common'
+import { z } from 'zod'
+import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin';
+import { UserAlreadyExistsError } from '@/core/errors/errors/user-already-exists-error';
 
 const createAdminAccountBodySchema = z.object({
   name: z.string(),
@@ -16,7 +16,7 @@ type CreateAccountBodySchema = z.infer<typeof createAdminAccountBodySchema>
 @Controller('/admin-accounts')
 export class CreateAdminAccountController {
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private registerAdmin: RegisterAdminUseCase) {}
 
   @Post()
   @HttpCode(201)
@@ -25,28 +25,23 @@ export class CreateAdminAccountController {
 
     const { name, cpf, email, password } = body
 
-    const userWithSameCpf = await this.prisma.user.findUnique({
-      where: {
-        cpf
-      }
+    const response = await this.registerAdmin.execute({
+      cpf,
+      email,
+      name,
+      password
     })
 
-    if (userWithSameCpf) {
-      throw new ConflictException(
-        'User with same CPF already exists.',
-      )
+    if (response.isFailure()) {
+      const error = response.value
+
+      switch (error.constructor) {
+        case UserAlreadyExistsError:
+          throw new ConflictException(error.message)
+        default:
+          throw new BadRequestException(error.message)
+      }
     }
-
-    const hashedPassword = await hash(password, 8)
-
-    await this.prisma.user.create({
-      data: {
-        name,
-        email,
-        cpf,
-        password: hashedPassword
-      }
-    })
   }
 
 }

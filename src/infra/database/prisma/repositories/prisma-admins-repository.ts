@@ -24,7 +24,12 @@ export class PrismaAdminsRepository implements AdminRepository {
   }
   
   async create(admin: Admin): Promise<void> {
-    throw new Error('Method not implemented.');
+
+    const data = PrismaAdminMapper.toPrisma(admin)
+
+    await this.prisma.user.create({
+      data
+    })
   }
 
   async save(admin: Admin): Promise<void> {

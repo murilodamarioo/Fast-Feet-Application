@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common'
+import { DatabaseModule } from '../database/database.module'
+
 import { AuthenticateController } from './controllers/authenticate.controller'
 import { CreateAdminAccountController } from './controllers/create-admin-account.controller'
 import { CreateOrderController } from './controllers/create-order.controller'
-import { DatabaseModule } from '@faker-js/faker/.'
+
+import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 
 @Module({
   imports: [DatabaseModule],
@@ -11,5 +14,8 @@ import { DatabaseModule } from '@faker-js/faker/.'
     AuthenticateController, 
     CreateOrderController
   ],
+  providers:[
+    RegisterAdminUseCase
+  ]
 })
 export class HttpModule {}

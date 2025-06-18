@@ -2,6 +2,7 @@ import { Either, failure, success } from '@/core/either'
 import { UserAlreadyExistsError } from '@/core/errors/errors/user-already-exists-error'
 import { Admin } from '@/domain/delivery/enterprise/entities/Admin'
 import { AdminRepository } from '../repositories/admin-repository'
+import { Injectable } from '@nestjs/common'
 
 export interface RegisterAdminUseCaseRequest {
   name: string
@@ -12,6 +13,7 @@ export interface RegisterAdminUseCaseRequest {
 
 type RegisterAdminUseCaseResponse = Either<UserAlreadyExistsError, { admin: Admin }>
 
+@Injectable()
 export class RegisterAdminUseCase {
 
   constructor(private adminRepository: AdminRepository) {}
@@ -31,6 +33,8 @@ export class RegisterAdminUseCase {
       email,
       password
     })
+
+    this.adminRepository.create(admin)
 
     return success({ admin })
   }
