@@ -1,7 +1,7 @@
 import { AdminRepository } from '@/domain/delivery/application/repositories/admin-repository'
 import { Admin } from '@/domain/delivery/enterprise/entities/Admin';
 
-export class InMemoryAdminRepository extends AdminRepository {
+export class InMemoryAdminRepository implements AdminRepository {
 
   public admins: Admin[] = []
 

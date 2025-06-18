@@ -1,7 +1,7 @@
 import { RecipientsRepository } from "@/domain/delivery/application/repositories/recipients-repository"
 import { Recipient } from "@/domain/delivery/enterprise/entities/Recipient"
 
-export class InMemoryRecipientRepository extends RecipientsRepository {
+export class InMemoryRecipientRepository implements RecipientsRepository {
   
   public recipients: Recipient[] = []
 
