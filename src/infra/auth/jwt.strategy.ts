@@ -3,7 +3,8 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { PassportStrategy } from '@nestjs/passport'
 import { z } from 'zod'
-import { Env } from '@/env'
+import { Env } from '../env'
+
 
 
 const tokenPayloadSchema = z.object({
