@@ -1,5 +1,5 @@
 export abstract class HashGenerator {
 
-  abstract hash(plan: string): Promise<string>
+  abstract hash(plain: string): Promise<string>
 
 }
