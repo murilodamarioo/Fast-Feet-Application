@@ -13,7 +13,7 @@ const createAdminAccountBodySchema = z.object({
 
 type CreateAccountBodySchema = z.infer<typeof createAdminAccountBodySchema>
 
-@Controller('/admin-accounts')
+@Controller('/admin-account')
 export class CreateAdminAccountController {
 
   constructor(private registerAdmin: RegisterAdminUseCase) {}
