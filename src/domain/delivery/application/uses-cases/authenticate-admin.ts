@@ -11,7 +11,7 @@ export interface AuthenticateAdminRequest {
 
 type AuthenticateAdminResponse = Either<WrongCredentialsError, { access_token: string }>
 
-export class AuthenticateAdmin {
+export class AuthenticateAdminUseCase {
 
   constructor(
     private adminRepository: AdminRepository,

@@ -1,9 +1,9 @@
-import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
-import { Body, Controller, HttpCode, Post, UnauthorizedException, UsePipes } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
-import { compare } from 'bcryptjs'
+
 import { z } from 'zod'
+import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
+import { BadRequestException, Body, Controller, HttpCode, Post, UnauthorizedException, UsePipes } from '@nestjs/common'
+import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin';
+import { WrongCredentialsError } from '@/core/errors/errors/wrong-credentials-error';
 
 const authenticateBodySchema = z.object({
   cpf: z.string(),
@@ -15,7 +15,7 @@ type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 @Controller('/sessions/admin')
 export class AuthenticateController {
 
-  constructor(private prisma: PrismaService, private jwt: JwtService) {}
+  constructor(private AuthenticateAdmin: AuthenticateAdminUseCase) {}
 
   @Post()
   @HttpCode(201)
@@ -23,24 +23,24 @@ export class AuthenticateController {
   async handle(@Body() body: AuthenticateBodySchema) {
     const { cpf, password } = body
 
-    const user = await this.prisma.user.findUnique({
-      where: {
-        cpf
-      }
+    const response = await this.AuthenticateAdmin.execute({
+      cpf,
+      password
     })
-    
-    if (!user) {
-      throw new UnauthorizedException('User credentials do not match.')
-    }
-    
-    const isPasswordValid = await compare(password, user.password)
 
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('User credentials do not match.')
-    }
+     if (response.isFailure()) {
+      const error = response.value
 
-    const accessToken = this.jwt.sign({ sub: user.id })
+      switch (error.constructor) {
+        case WrongCredentialsError:
+          throw new UnauthorizedException(error.message)
+        default:
+          throw new BadRequestException(error.message)
+      }
+     }
 
-    return { access_token: accessToken }
+     const { access_token } = response.value
+
+    return { access_token }
   }
 }

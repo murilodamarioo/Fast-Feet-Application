@@ -6,16 +6,21 @@ import { CreateAdminAccountController } from './controllers/create-admin-account
 import { CreateOrderController } from './controllers/create-order.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
+import { CryptographyModule } from '../cryptography/cryptography.module'
+import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
+import { CreateOrderUseCase } from '@/domain/delivery/application/uses-cases/create-order'
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, CryptographyModule],
   controllers: [
     CreateAdminAccountController, 
     AuthenticateController, 
     CreateOrderController
   ],
   providers:[
-    RegisterAdminUseCase
+    RegisterAdminUseCase,
+    AuthenticateAdminUseCase,
+    CreateOrderUseCase
   ]
 })
 export class HttpModule {}
