@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { DatabaseModule } from '../database/database.module'
 
-import { AuthenticateController } from './controllers/authenticate.controller'
+import { AuthenticateController } from './controllers/authenticate-admin.controller'
 import { CreateAdminAccountController } from './controllers/create-admin-account.controller'
 import { CreateOrderController } from './controllers/create-order.controller'
 
