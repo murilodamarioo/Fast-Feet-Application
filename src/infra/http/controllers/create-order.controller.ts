@@ -1,7 +1,6 @@
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { Body, Controller, HttpCode, Post, UseGuards, UsePipes } from '@nestjs/common'
-import { AuthGuard } from '@nestjs/passport'
 import { z } from 'zod'
 
 
@@ -14,7 +13,6 @@ const createOrderBodySchema = z.object({
 type CreateOrderBodySchema = z.infer<typeof createOrderBodySchema>
 
 @Controller('/order')
-@UseGuards(AuthGuard('jwt'))
 export class CreateOrderController {
 
   constructor(private prisma: PrismaService) {}

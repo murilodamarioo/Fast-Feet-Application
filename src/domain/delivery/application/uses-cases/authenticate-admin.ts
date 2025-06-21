@@ -3,6 +3,7 @@ import { AdminRepository } from '../repositories/admin-repository'
 import { HashComparer } from '../cryptography/hash-comparer'
 import { Encrypter } from '../cryptography/encrypter'
 import { WrongCredentialsError } from '@/core/errors/errors/wrong-credentials-error'
+import { Injectable } from '@nestjs/common'
 
 export interface AuthenticateAdminRequest {
   cpf: string
@@ -11,6 +12,7 @@ export interface AuthenticateAdminRequest {
 
 type AuthenticateAdminResponse = Either<WrongCredentialsError, { access_token: string }>
 
+@Injectable()
 export class AuthenticateAdminUseCase {
 
   constructor(

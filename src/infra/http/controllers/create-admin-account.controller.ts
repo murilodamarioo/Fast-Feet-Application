@@ -3,6 +3,7 @@ import { BadRequestException, Body, ConflictException, Controller, HttpCode, Pos
 import { z } from 'zod'
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin';
 import { UserAlreadyExistsError } from '@/core/errors/errors/user-already-exists-error';
+import { Public } from '@/infra/auth/public';
 
 const createAdminAccountBodySchema = z.object({
   name: z.string(),
@@ -14,6 +15,7 @@ const createAdminAccountBodySchema = z.object({
 type CreateAccountBodySchema = z.infer<typeof createAdminAccountBodySchema>
 
 @Controller('/admin-account')
+@Public()
 export class CreateAdminAccountController {
 
   constructor(private registerAdmin: RegisterAdminUseCase) {}

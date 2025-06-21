@@ -4,6 +4,7 @@ import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { BadRequestException, Body, Controller, HttpCode, Post, UnauthorizedException, UsePipes } from '@nestjs/common'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin';
 import { WrongCredentialsError } from '@/core/errors/errors/wrong-credentials-error';
+import { Public } from '@/infra/auth/public';
 
 const authenticateBodySchema = z.object({
   cpf: z.string(),
@@ -13,6 +14,7 @@ const authenticateBodySchema = z.object({
 type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 
 @Controller('/sessions/admin')
+@Public()
 export class AuthenticateController {
 
   constructor(private AuthenticateAdmin: AuthenticateAdminUseCase) {}
