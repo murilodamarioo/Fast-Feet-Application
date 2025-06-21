@@ -25,8 +25,6 @@ describe('Create Admin account (E2E)', () => {
         password: '12345'
       })
 
-      console.log(JSON.stringify(response))
-
     expect(response.statusCode).toBe(201)
   })
 })

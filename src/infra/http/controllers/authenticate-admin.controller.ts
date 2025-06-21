@@ -17,7 +17,7 @@ type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 @Public()
 export class AuthenticateController {
 
-  constructor(private AuthenticateAdmin: AuthenticateAdminUseCase) {}
+  constructor(private authenticateAdmin: AuthenticateAdminUseCase) {}
 
   @Post()
   @HttpCode(201)
@@ -25,7 +25,7 @@ export class AuthenticateController {
   async handle(@Body() body: AuthenticateBodySchema) {
     const { cpf, password } = body
 
-    const response = await this.AuthenticateAdmin.execute({
+    const response = await this.authenticateAdmin.execute({
       cpf,
       password
     })
@@ -41,7 +41,7 @@ export class AuthenticateController {
       }
      }
 
-     const { access_token } = response.value
+    const { access_token } = response.value
 
     return { access_token }
   }
