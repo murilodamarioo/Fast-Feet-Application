@@ -1,10 +1,13 @@
 import { hash } from 'bcryptjs'
+
 import { INestApplication } from '@nestjs/common'
+import { Test } from '@nestjs/testing'
+
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
 
+
 import { AdminFactory } from 'test/factories/make-admin'
-import { Test } from '@nestjs/testing'
 import request from 'supertest'
 
 describe('Authenticate Admin (E2E)', () => {

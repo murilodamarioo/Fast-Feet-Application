@@ -1,4 +1,3 @@
-
 import { z } from 'zod'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { BadRequestException, Body, Controller, HttpCode, Post, UnauthorizedException, UsePipes } from '@nestjs/common'
@@ -30,7 +29,7 @@ export class AuthenticateController {
       password
     })
 
-     if (response.isFailure()) {
+    if (response.isFailure()) {
       const error = response.value
 
       switch (error.constructor) {
@@ -39,7 +38,7 @@ export class AuthenticateController {
         default:
           throw new BadRequestException(error.message)
       }
-     }
+    }
 
     const { access_token } = response.value
 
