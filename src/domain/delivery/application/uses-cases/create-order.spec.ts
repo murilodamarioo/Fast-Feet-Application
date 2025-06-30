@@ -12,7 +12,7 @@ describe('Create Order', () => {
   beforeAll(() => {
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
     inMemoryOrderRepository = new InMemoryOrderRepository(inMemoryRecipientRepository)
-    sut = new CreateOrderUseCase(inMemoryOrderRepository)
+    sut = new CreateOrderUseCase(inMemoryOrderRepository, inMemoryRecipientRepository)
   })
 
   it('should create an order', async () => {
