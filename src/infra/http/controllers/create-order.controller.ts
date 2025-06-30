@@ -1,7 +1,8 @@
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
-import { Body, Controller, HttpCode, Post, UseGuards, UsePipes } from '@nestjs/common'
+import { BadRequestException, Body, Controller, HttpCode, Post, UseGuards, UsePipes } from '@nestjs/common'
 import { z } from 'zod'
+import { CreateOrderUseCase } from '@/domain/delivery/application/uses-cases/create-order'
+import { RecipientNotFoundError } from '@/core/errors/errors/recipient-not-found-error'
 
 
 const createOrderBodySchema = z.object({
@@ -15,7 +16,7 @@ type CreateOrderBodySchema = z.infer<typeof createOrderBodySchema>
 @Controller('/order')
 export class CreateOrderController {
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private createOrder: CreateOrderUseCase) {}
 
   @Post()
   @HttpCode(201)
@@ -23,13 +24,22 @@ export class CreateOrderController {
   async handle(@Body() body: CreateOrderBodySchema) {
     const { orderName, courierId, recipientId } = body
 
-    await this.prisma.order.create({
-      data: {
-        title: orderName,
-        courierId,
-        recipientId
-      }
+    const response = await this.createOrder.execute({
+      recipientId,
+      courierId,
+      orderName
     })
+
+    if (response.isFailure()) {
+      const error = response.value
+      
+      switch (error.constructor) {
+        case RecipientNotFoundError:
+          throw new BadRequestException(error.message)
+        default:
+          throw new BadRequestException(error.message)
+      }
+    }
   }
 
 }
