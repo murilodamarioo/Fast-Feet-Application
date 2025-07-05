@@ -9,18 +9,22 @@ import { CreateOrderController } from './controllers/create-order.controller'
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
 import { CreateOrderUseCase } from '@/domain/delivery/application/uses-cases/create-order'
+import { ChangeAdminPasswordController } from './controllers/change-admin-password.controller'
+import { ChangeAdminPasswordUseCase } from '@/domain/delivery/application/uses-cases/change-admin-password'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
   controllers: [
     CreateAdminAccountController, 
     AuthenticateController, 
-    CreateOrderController
+    CreateOrderController,
+    ChangeAdminPasswordController
   ],
   providers:[
     RegisterAdminUseCase,
     AuthenticateAdminUseCase,
-    CreateOrderUseCase
+    CreateOrderUseCase,
+    ChangeAdminPasswordUseCase
   ]
 })
 export class HttpModule {}

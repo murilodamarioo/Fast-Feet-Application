@@ -1,6 +1,8 @@
+import { Injectable } from '@nestjs/common'
 import { Either, failure, success } from '@/core/either'
 import { AdminNotFoundError } from '@/core/errors/errors/admin-not-found-error'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
+
 import { AdminRepository } from '../repositories/admin-repository'
 
 export interface ChangeAdminPasswordUseCaseRequest {
@@ -10,13 +12,14 @@ export interface ChangeAdminPasswordUseCaseRequest {
 
 type ChangeAdminPasswordUseCaseResponse = Either<AdminNotFoundError | NotAllowedError, null>
 
+@Injectable()
 export class ChangeAdminPasswordUseCase {
 
   constructor(private adminRepository: AdminRepository) {}
 
   async execute(
     { adminId, newPassword }: ChangeAdminPasswordUseCaseRequest
-  ): Promise<ChangeAdminPasswordUseCaseResponse>  {
+  ): Promise<ChangeAdminPasswordUseCaseResponse> {
     const admin = await this.adminRepository.findById(adminId)
     
     if (!admin) {

@@ -20,7 +20,13 @@ export class PrismaAdminsRepository implements AdminRepository {
   }
   
   async findById(id: string): Promise<Admin | null> {
-    throw new Error('Method not implemented.');
+    const admin = await this.prisma.user.findUnique({
+      where: {
+        id
+      }
+    })
+
+    return admin ? PrismaAdminMapper.toDomain(admin) : null
   }
   
   async create(admin: Admin): Promise<void> {
@@ -33,7 +39,14 @@ export class PrismaAdminsRepository implements AdminRepository {
   }
 
   async save(admin: Admin): Promise<void> {
-    throw new Error('Method not implemented.');
+    const data = PrismaAdminMapper.toPrisma(admin)
+
+    await this.prisma.user.update({
+      where: {
+        id: admin.id.toString()
+      },
+      data
+    })
   }
 
 }

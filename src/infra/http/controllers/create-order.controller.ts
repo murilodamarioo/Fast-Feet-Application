@@ -1,5 +1,5 @@
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { BadRequestException, Body, Controller, HttpCode, Post, UseGuards, UsePipes } from '@nestjs/common'
+import { BadRequestException, Body, Controller, HttpCode, Post, UsePipes } from '@nestjs/common'
 import { z } from 'zod'
 import { CreateOrderUseCase } from '@/domain/delivery/application/uses-cases/create-order'
 import { RecipientNotFoundError } from '@/core/errors/errors/recipient-not-found-error'
