@@ -4,6 +4,7 @@ import { AdminNotFoundError } from '@/core/errors/errors/admin-not-found-error'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 import { AdminRepository } from '../repositories/admin-repository'
+import { HashGenerator } from '../cryptography/hash-generator'
 
 export interface ChangeAdminPasswordUseCaseRequest {
   adminId: string
@@ -15,7 +16,10 @@ type ChangeAdminPasswordUseCaseResponse = Either<AdminNotFoundError | NotAllowed
 @Injectable()
 export class ChangeAdminPasswordUseCase {
 
-  constructor(private adminRepository: AdminRepository) {}
+  constructor(
+    private adminRepository: AdminRepository,
+    private hashGenerator: HashGenerator
+  ) {}
 
   async execute(
     { adminId, newPassword }: ChangeAdminPasswordUseCaseRequest
@@ -26,7 +30,7 @@ export class ChangeAdminPasswordUseCase {
       return failure(new AdminNotFoundError())
     }
 
-    admin.password = newPassword
+    admin.password = await this.hashGenerator.hash(newPassword)
     await this.adminRepository.save(admin)
 
     return success(null)

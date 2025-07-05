@@ -1,5 +1,3 @@
-import { OrderStatus } from '@prisma/client'
-
 import { Test } from '@nestjs/testing'
 import { JwtService } from '@nestjs/jwt'
 import { INestApplication } from '@nestjs/common'
