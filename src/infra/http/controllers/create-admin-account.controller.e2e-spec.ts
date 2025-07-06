@@ -16,8 +16,8 @@ describe('Create Admin account (E2E)', () => {
     await app.init()
   })
 
-  test('[POST] /admin-account', async () => {
-    const response = await request(app.getHttpServer()).post('/admin-account')
+  test('[POST] /accounts/admin', async () => {
+    const response = await request(app.getHttpServer()).post('/accounts/admin')
       .send({
         name: 'John Doe',
         email: 'john@gmail.com',
