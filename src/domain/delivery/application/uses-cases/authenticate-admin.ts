@@ -5,12 +5,12 @@ import { Encrypter } from '../cryptography/encrypter'
 import { WrongCredentialsError } from '@/core/errors/errors/wrong-credentials-error'
 import { Injectable } from '@nestjs/common'
 
-export interface AuthenticateAdminRequest {
+export interface AuthenticateAdminUseCaseRequest {
   cpf: string
   password: string
 }
 
-type AuthenticateAdminResponse = Either<WrongCredentialsError, { access_token: string }>
+type AuthenticateAdminUseCaseResponse = Either<WrongCredentialsError, { access_token: string }>
 
 @Injectable()
 export class AuthenticateAdminUseCase {
@@ -21,7 +21,7 @@ export class AuthenticateAdminUseCase {
     private encrypter: Encrypter
   ) {}
 
-  async execute({ cpf, password }: AuthenticateAdminRequest): Promise<AuthenticateAdminResponse> {
+  async execute({ cpf, password }: AuthenticateAdminUseCaseRequest): Promise<AuthenticateAdminUseCaseResponse> {
     const admin = await this.adminRepository.findByCpf(cpf)
 
     if (!admin) {
