@@ -14,7 +14,7 @@ type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 
 @Controller('/sessions/admin')
 @Public()
-export class AuthenticateController {
+export class AuthenticateAdminController {
 
   constructor(private authenticateAdmin: AuthenticateAdminUseCase) {}
 

@@ -27,7 +27,7 @@ describe('Authenticate Admin (E2E)', () => {
     await app.init()
   })
 
-  it('[POST] /sessions/admin', async () => {
+  test('[POST] /sessions/admin', async () => {
     await adminFactory.makePrismaAdmin({
       cpf: '43265432289',
       password: await hash('12345', 8)
