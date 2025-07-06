@@ -1,10 +1,11 @@
 import z from 'zod'
-import { BadRequestException, Body, Controller, HttpCode, Put, UsePipes } from '@nestjs/common'
+import { BadRequestException, Body, Controller, HttpCode, Put } from '@nestjs/common'
 
 import { ChangeAdminPasswordUseCase } from '@/domain/delivery/application/uses-cases/change-admin-password'
 
 import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
+
 import { AdminNotFoundError } from '@/core/errors/errors/admin-not-found-error'
 
 const changeAdminPasswordBodySchema = z.object({

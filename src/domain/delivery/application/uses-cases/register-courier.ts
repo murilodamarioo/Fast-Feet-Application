@@ -2,6 +2,7 @@ import { Courier } from '@/domain/delivery/enterprise/entities/Courier'
 import { CouriersRepository } from '../repositories/couriers-repository'
 import { Either, failure, success } from '@/core/either'
 import { UserAlreadyExistsError } from '@/core/errors/errors/user-already-exists-error'
+import { Injectable } from '@nestjs/common'
 
 interface RegisterCourierUseCaseRequest {
   name: string
@@ -12,6 +13,7 @@ interface RegisterCourierUseCaseRequest {
 
 type ResgisterCourierUseCaseResponse = Either<UserAlreadyExistsError, { courier: Courier }>
 
+@Injectable()
 export class RegisterCourierUseCase {
 
   constructor(private couriersRepository: CouriersRepository) {}
