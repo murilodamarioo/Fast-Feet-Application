@@ -12,14 +12,20 @@ export class PrismaOrdersRepository implements OrdersRepository {
   constructor(private prisma: PrismaService) {}
   
   async findById(id: string): Promise<Order | null> {
-    throw new Error('Method not implemented.')
+    const order = await this.prisma.order.findUnique({
+      where: {
+        id
+      }
+    })
+
+    return order ? PrismaOrderMapper.toDomain(order) : null
   }
   
   async findOrderDetailsById(id: string): Promise<OrderDetails | null> {
     throw new Error('Method not implemented.')
   }
   
-  findManyByStatus(courierId: string, status: string): Promise<Order[]> {
+  async findManyByStatus(courierId: string, status: string): Promise<Order[]> {
     throw new Error('Method not implemented.')
   }
   
@@ -32,11 +38,25 @@ export class PrismaOrdersRepository implements OrdersRepository {
   }
   
   async save(order: Order): Promise<void> {
-    throw new Error('Method not implemented.')
+    const data = PrismaOrderMapper.toPrisma(order)
+
+    await this.prisma.order.update({
+      where: {
+        id: order.id.toString()
+      },
+      data
+    })
   }
   
   async updateStatus(order: Order): Promise<void> {
-    throw new Error('Method not implemented.')
+    const data = PrismaOrderMapper.toPrisma(order)
+
+    await this.prisma.order.update({
+      where: {
+        id: order.id.toString()
+      },
+      data
+    })
   }
   
 }

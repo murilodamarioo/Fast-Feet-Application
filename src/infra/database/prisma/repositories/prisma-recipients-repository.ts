@@ -10,7 +10,13 @@ export class PrismaRecipientsRepository implements RecipientsRepository {
   constructor(private prisma: PrismaService) {}
 
   async findByEmail(email: string): Promise<Recipient | null> {
-    throw new Error('Method not implemented.');
+    const recipient = await this.prisma.recipient.findUnique({
+      where: {
+        email
+      }
+    })
+
+    return recipient ? PrismaRecipientMapper.toDomain(recipient) : null
   }
 
   async findById(id: string): Promise<Recipient | null> {
@@ -32,11 +38,22 @@ export class PrismaRecipientsRepository implements RecipientsRepository {
   }
 
   async save(recipient: Recipient): Promise<void> {
-    throw new Error('Method not implemented.');
+    const data = PrismaRecipientMapper.toPrisma(recipient)
+
+    await this.prisma.recipient.update({
+      where: {
+        id: recipient.id.toString()
+      },
+      data
+    })
   }
   
   async delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.prisma.recipient.delete({
+      where: {
+        id
+      }
+    })
   }
 
 }
