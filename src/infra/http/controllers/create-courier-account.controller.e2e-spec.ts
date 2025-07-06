@@ -26,7 +26,7 @@ describe('Create courier account (E2E)', () => {
     await app.init()
   })
 
-  it('[POST] /accounts/courier', async () => {
+  test('[POST] /accounts/courier', async () => {
     const admin = await adminFactory.makePrismaAdmin()
 
     const acessToken = jwt.sign({ sub: admin.id.toString() })

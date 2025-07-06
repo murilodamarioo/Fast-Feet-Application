@@ -32,7 +32,7 @@ describe('Change Admin password (E2E)', () => {
     await app.init()
   })
 
-  it ('[PUT] /admin/change-password', async () => {
+  test('[PUT] /admin/change-password', async () => {
     const admin = await adminFactory.makePrismaAdmin({
       password: await hash('12345', 8)
     })
