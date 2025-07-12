@@ -2,6 +2,7 @@ import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repos
 import { CreateOrderUseCase } from './create-order'
 import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
 import { makeOrder } from 'test/factories/make-order'
+import { makeRecipient } from 'test/factories/make-recipient'
 
 let sut: CreateOrderUseCase
 let inMemoryRecipientRepository: InMemoryRecipientRepository
@@ -16,7 +17,11 @@ describe('Create Order', () => {
   })
 
   it('should create an order', async () => {
-    const order = makeOrder()
+    const recipient = makeRecipient()
+
+    inMemoryRecipientRepository.create(recipient)
+
+    const order = makeOrder({ recipientId: recipient.id })
 
     const response = await sut.execute({
       recipientId: order.recipientId.toString(),
@@ -24,7 +29,7 @@ describe('Create Order', () => {
       orderName: order.orderName,
     })
 
-    expect(response.isSuccess).toBeTruthy()
+    expect(response.isSuccess()).toBeTruthy()
     expect(inMemoryOrderRepository.orders).toHaveLength(1)
   })
 })

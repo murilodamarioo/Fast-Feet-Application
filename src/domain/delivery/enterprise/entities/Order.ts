@@ -7,7 +7,7 @@ import { ChangeStatusEvent } from '../events/change-status-event'
 
 export interface OrderProps {
   recipientId: UniqueEntityId
-  courierId: UniqueEntityId | null
+  courierId: UniqueEntityId
   orderName: string
   postedAt: Date | null
   pickedUp: Date | null
