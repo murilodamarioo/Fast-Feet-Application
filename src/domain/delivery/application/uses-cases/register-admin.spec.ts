@@ -1,16 +1,16 @@
 import { InMemoryAdminRepository } from 'test/repositories/in-memory-admin-repository'
 import { RegisterAdminUseCase } from './register-admin'
-import { FakeHaher } from 'test/cryptography/fake-hasher'
+import { FakeHasher } from 'test/cryptography/fake-hasher'
 
 let sut: RegisterAdminUseCase
 let inMemoryAdminRepository: InMemoryAdminRepository
-let fakeHasher: FakeHaher
+let fakeHasher: FakeHasher
 
 describe('Register an Admin', () => {
 
   beforeEach(() => {
     inMemoryAdminRepository = new InMemoryAdminRepository()
-    fakeHasher = new FakeHaher()
+    fakeHasher = new FakeHasher()
     sut = new RegisterAdminUseCase(inMemoryAdminRepository, fakeHasher)
   })
 

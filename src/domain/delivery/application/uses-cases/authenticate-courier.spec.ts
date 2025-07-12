@@ -1,5 +1,5 @@
 import { InMemoryCourierRepository } from 'test/repositories/in-memory-courier-reposiotry' 
-import { FakeHaher } from 'test/cryptography/fake-hasher'
+import { FakeHasher } from 'test/cryptography/fake-hasher'
 import { FakeEcrypter } from 'test/cryptography/fake-encrypter'
 
 import { AuthenticateCourierUseCase } from './authenticate-courier'
@@ -7,14 +7,14 @@ import { makeCourier } from 'test/factories/make-courier'
 
 let sut: AuthenticateCourierUseCase
 let inMemoryCourierRepository: InMemoryCourierRepository
-let fakeHasher: FakeHaher
+let fakeHasher: FakeHasher
 let fakeEncrypter: FakeEcrypter
 
 describe('Authenticate Courier', () => {
 
   beforeEach(() => {
     inMemoryCourierRepository = new InMemoryCourierRepository()
-    fakeHasher = new FakeHaher()
+    fakeHasher = new FakeHasher()
     fakeEncrypter = new FakeEcrypter()
     sut = new AuthenticateCourierUseCase(inMemoryCourierRepository, fakeHasher, fakeEncrypter)
   })
