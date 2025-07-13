@@ -7,6 +7,7 @@ import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
 
 import { AdminNotFoundError } from '@/core/errors/errors/admin-not-found-error'
+import { Roles } from '@/infra/permission/roles.decorator'
 
 const changeAdminPasswordBodySchema = z.object({
   password: z.string()
@@ -20,6 +21,7 @@ export class ChangeAdminPasswordController {
   constructor(private changeAdminPassword: ChangeAdminPasswordUseCase) {}
 
   @Put()
+  @Roles(['ADMIN'])
   @HttpCode(200)
   async handle(
     @Body() body: ChangeAdminPasswordBodySchema,

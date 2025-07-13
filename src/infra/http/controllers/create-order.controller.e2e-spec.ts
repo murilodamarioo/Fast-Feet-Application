@@ -64,4 +64,22 @@ describe('Create Order (E2E)', () => {
 
     expect(orderOnDatabase).toBeTruthy()
   })
+
+  test('POST /order - Forbidden', async () => {
+    const courier = await courierFactory.makePrismaCourier()
+    const recipient = await recipientFactory.makePrismaRecipient()
+
+    const accessToken = jwt.sign({ sub: courier.id.toString() })
+
+    const response = await request(app.getHttpServer())
+      .post('/order')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        orderName: '02',
+        recipientId: recipient.id.toString(),
+        courierId: courier.id.toString()
+      })
+
+    expect(response.statusCode).toBe(403)
+  })
 })
