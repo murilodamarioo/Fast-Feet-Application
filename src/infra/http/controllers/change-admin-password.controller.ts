@@ -1,5 +1,5 @@
 import z from 'zod'
-import { BadRequestException, Body, Controller, HttpCode, Put } from '@nestjs/common'
+import { BadRequestException, Body, Controller, HttpCode, Put, UnauthorizedException } from '@nestjs/common'
 
 import { ChangeAdminPasswordUseCase } from '@/domain/delivery/application/uses-cases/change-admin-password'
 
@@ -39,7 +39,7 @@ export class ChangeAdminPasswordController {
 
       switch (error.constructor) {
         case AdminNotFoundError:
-          throw new BadRequestException(error.message)
+          throw new UnauthorizedException(error.message)
         default:
           throw new BadRequestException(error.message)
       }
