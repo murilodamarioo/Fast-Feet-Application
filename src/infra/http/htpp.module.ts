@@ -8,6 +8,7 @@ import { CreateOrderController } from './controllers/create-order.controller'
 import { CreateCourierAccountController } from './controllers/create-courier-account.controller'
 import { ChangeAdminPasswordController } from './controllers/change-admin-password.controller'
 import { AuthenticateCourierController } from './controllers/authenticate-courier.controller'
+import { ChangeCourierPasswordController } from './controllers/change-courier-password.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
@@ -15,6 +16,7 @@ import { CreateOrderUseCase } from '@/domain/delivery/application/uses-cases/cre
 import { ChangeAdminPasswordUseCase } from '@/domain/delivery/application/uses-cases/change-admin-password'
 import { RegisterCourierUseCase } from '@/domain/delivery/application/uses-cases/register-courier'
 import { AuthenticateCourierUseCase } from '@/domain/delivery/application/uses-cases/authenticate-courier'
+import { ChangeCourierPasswordUseCase } from '@/domain/delivery/application/uses-cases/change-courier-password'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -24,7 +26,8 @@ import { AuthenticateCourierUseCase } from '@/domain/delivery/application/uses-c
     CreateOrderController,
     ChangeAdminPasswordController,
     CreateCourierAccountController,
-    AuthenticateCourierController
+    AuthenticateCourierController,
+    ChangeCourierPasswordController
   ],
   providers:[
     RegisterAdminUseCase,
@@ -32,7 +35,8 @@ import { AuthenticateCourierUseCase } from '@/domain/delivery/application/uses-c
     CreateOrderUseCase,
     ChangeAdminPasswordUseCase,
     RegisterCourierUseCase,
-    AuthenticateCourierUseCase
+    AuthenticateCourierUseCase,
+    ChangeCourierPasswordUseCase
   ]
 })
 export class HttpModule {}

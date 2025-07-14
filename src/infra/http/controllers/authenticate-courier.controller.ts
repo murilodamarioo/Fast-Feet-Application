@@ -7,7 +7,6 @@ import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { WrongCredentialsError } from '@/core/errors/errors/wrong-credentials-error'
 import { Public } from '@/infra/auth/public'
 import { AuthenticateCourierUseCase } from '@/domain/delivery/application/uses-cases/authenticate-courier'
-import { success } from '@/core/either'
 
 const authenticateBodySchema = z.object({
   cpf: z.string(),
