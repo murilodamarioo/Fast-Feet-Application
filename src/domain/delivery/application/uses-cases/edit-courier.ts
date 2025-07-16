@@ -2,6 +2,7 @@ import { CourierNotFoundError } from '@/core/errors/errors/courier-not-found-err
 import { Either, failure, success } from '@/core/either'
 import { CouriersRepository } from '../repositories/couriers-repository'
 import { Courier } from '@/domain/delivery/enterprise/entities/Courier';
+import { Injectable } from '@nestjs/common';
 
 export interface EditCourierUseCaseRequest {
   courierId: string
@@ -12,6 +13,7 @@ export interface EditCourierUseCaseRequest {
 
 type EditCourierUseCaseResponse = Either<CourierNotFoundError, { courier: Courier }>
 
+@Injectable()
 export class EditCourierUseCase {
 
   constructor(private couriersRepository: CouriersRepository) {}
@@ -23,9 +25,9 @@ export class EditCourierUseCase {
       return failure(new CourierNotFoundError())
     }
 
-    courier.name = name
-    courier.cpf = cpf
-    courier.email = email
+    courier.name = name || courier.name
+    courier.cpf = cpf || courier.cpf
+    courier.email = email || courier.email
 
     await this.couriersRepository.save(courier)
 

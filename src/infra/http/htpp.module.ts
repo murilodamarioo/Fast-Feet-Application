@@ -17,6 +17,8 @@ import { ChangeAdminPasswordUseCase } from '@/domain/delivery/application/uses-c
 import { RegisterCourierUseCase } from '@/domain/delivery/application/uses-cases/register-courier'
 import { AuthenticateCourierUseCase } from '@/domain/delivery/application/uses-cases/authenticate-courier'
 import { ChangeCourierPasswordUseCase } from '@/domain/delivery/application/uses-cases/change-courier-password'
+import { EditCourierController } from './controllers/edit-courier.controller'
+import { EditCourierUseCase } from '@/domain/delivery/application/uses-cases/edit-courier'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -27,7 +29,8 @@ import { ChangeCourierPasswordUseCase } from '@/domain/delivery/application/uses
     ChangeAdminPasswordController,
     CreateCourierAccountController,
     AuthenticateCourierController,
-    ChangeCourierPasswordController
+    ChangeCourierPasswordController,
+    EditCourierController
   ],
   providers:[
     RegisterAdminUseCase,
@@ -36,7 +39,8 @@ import { ChangeCourierPasswordUseCase } from '@/domain/delivery/application/uses
     ChangeAdminPasswordUseCase,
     RegisterCourierUseCase,
     AuthenticateCourierUseCase,
-    ChangeCourierPasswordUseCase
+    ChangeCourierPasswordUseCase,
+    EditCourierUseCase
   ]
 })
 export class HttpModule {}

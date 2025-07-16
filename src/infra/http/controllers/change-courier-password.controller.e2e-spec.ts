@@ -62,8 +62,6 @@ describe('Change courier password (E2E)', () => {
       }
     })
 
-    console.log(JSON.stringify(courierOnDatabase))
-
     const passwordMatches = await compare(newPassword, courierOnDatabase!.password)
     
     expect(passwordMatches).toBeTruthy()
