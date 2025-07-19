@@ -11,6 +11,7 @@ import { AuthenticateCourierController } from './controllers/authenticate-courie
 import { ChangeCourierPasswordController } from './controllers/change-courier-password.controller'
 import { EditCourierController } from './controllers/edit-courier.controller'
 import { RegisterRecipientController } from './controllers/register-recipient.controller'
+import { DeleteCourierController } from './controllers/delete-courier.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
@@ -21,21 +22,23 @@ import { AuthenticateCourierUseCase } from '@/domain/delivery/application/uses-c
 import { ChangeCourierPasswordUseCase } from '@/domain/delivery/application/uses-cases/change-courier-password'
 import { EditCourierUseCase } from '@/domain/delivery/application/uses-cases/edit-courier'
 import { RegisterRecipientUseCase } from '@/domain/delivery/application/uses-cases/register-recipient'
+import { DeleteCourierUseCase } from '@/domain/delivery/application/uses-cases/delete-courier'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
   controllers: [
-    CreateAdminAccountController, 
-    AuthenticateAdminController, 
+    CreateAdminAccountController,
+    AuthenticateAdminController,
     CreateOrderController,
     ChangeAdminPasswordController,
     CreateCourierAccountController,
     AuthenticateCourierController,
     ChangeCourierPasswordController,
     EditCourierController,
-    RegisterRecipientController
+    RegisterRecipientController,
+    DeleteCourierController
   ],
-  providers:[
+  providers: [
     RegisterAdminUseCase,
     AuthenticateAdminUseCase,
     CreateOrderUseCase,
@@ -44,7 +47,8 @@ import { RegisterRecipientUseCase } from '@/domain/delivery/application/uses-cas
     AuthenticateCourierUseCase,
     ChangeCourierPasswordUseCase,
     EditCourierUseCase,
-    RegisterRecipientUseCase
+    RegisterRecipientUseCase,
+    DeleteCourierUseCase
   ]
 })
-export class HttpModule {}
+export class HttpModule { }
