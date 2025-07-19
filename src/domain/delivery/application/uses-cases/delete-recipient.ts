@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common'
 import { Either, failure, success } from '@/core/either'
 import { RecipientsRepository } from '../repositories/recipients-repository'
 import { RecipientNotFoundError } from '@/core/errors/errors/recipient-not-found-error'
@@ -8,9 +9,10 @@ export interface DeleteRecipientUseCaseRequest {
 
 type DeleteRecipientUseCaseResponse = Either<RecipientNotFoundError, null>
 
+@Injectable()
 export class DeleteRecipientUseCase {
 
-  constructor(private recipientsRepository: RecipientsRepository) {}
+  constructor(private recipientsRepository: RecipientsRepository) { }
 
   async execute({ recipientId }: DeleteRecipientUseCaseRequest): Promise<DeleteRecipientUseCaseResponse> {
     const recipient = await this.recipientsRepository.findById(recipientId)

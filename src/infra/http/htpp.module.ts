@@ -12,6 +12,7 @@ import { ChangeCourierPasswordController } from './controllers/change-courier-pa
 import { EditCourierController } from './controllers/edit-courier.controller'
 import { RegisterRecipientController } from './controllers/register-recipient.controller'
 import { DeleteCourierController } from './controllers/delete-courier.controller'
+import { DeleteRecipientController } from './controllers/delete-recipient.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
@@ -23,6 +24,7 @@ import { ChangeCourierPasswordUseCase } from '@/domain/delivery/application/uses
 import { EditCourierUseCase } from '@/domain/delivery/application/uses-cases/edit-courier'
 import { RegisterRecipientUseCase } from '@/domain/delivery/application/uses-cases/register-recipient'
 import { DeleteCourierUseCase } from '@/domain/delivery/application/uses-cases/delete-courier'
+import { DeleteRecipientUseCase } from '@/domain/delivery/application/uses-cases/delete-recipient'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -36,7 +38,8 @@ import { DeleteCourierUseCase } from '@/domain/delivery/application/uses-cases/d
     ChangeCourierPasswordController,
     EditCourierController,
     RegisterRecipientController,
-    DeleteCourierController
+    DeleteCourierController,
+    DeleteRecipientController
   ],
   providers: [
     RegisterAdminUseCase,
@@ -48,7 +51,8 @@ import { DeleteCourierUseCase } from '@/domain/delivery/application/uses-cases/d
     ChangeCourierPasswordUseCase,
     EditCourierUseCase,
     RegisterRecipientUseCase,
-    DeleteCourierUseCase
+    DeleteCourierUseCase,
+    DeleteRecipientUseCase
   ]
 })
 export class HttpModule { }
