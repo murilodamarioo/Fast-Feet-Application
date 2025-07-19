@@ -4,7 +4,7 @@ import { CourierNotFoundError } from '@/core/errors/errors/courier-not-found-err
 import { DeleteCourierUseCase } from '@/domain/delivery/application/uses-cases/delete-courier'
 import { Roles } from '@/infra/permission/roles.decorator'
 
-@Controller('/courier/:id')
+@Controller('/couriers/:id')
 export class DeleteCourierController {
 
   constructor(private deleteCourier: DeleteCourierUseCase) { }

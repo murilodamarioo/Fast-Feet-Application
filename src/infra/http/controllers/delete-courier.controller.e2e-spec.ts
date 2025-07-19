@@ -35,7 +35,7 @@ describe('Delete courier (E2E)', () => {
     await app.init()
   })
 
-  test('[DELETE] /courier/:id', async () => {
+  test('[DELETE] /couriers/:id', async () => {
     const admin = await adminFactory.makePrismaAdmin()
     const accessToken = jwt.sign({ sub: admin.id.toString() })
 
@@ -45,7 +45,7 @@ describe('Delete courier (E2E)', () => {
     await courierFactory.makePrismaCourier()
 
     const response = await request(app.getHttpServer())
-      .delete(`/courier/${courierId}`)
+      .delete(`/couriers/${courierId}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
@@ -60,13 +60,13 @@ describe('Delete courier (E2E)', () => {
     expect(courierOnDatase).toBeFalsy()
   })
 
-  test('[DELETE] /courier/:id', async () => {
+  test('[DELETE] /couriers/:id - Forbidden', async () => {
     const courier = await courierFactory.makePrismaCourier()
     const courierId = courier.id.toString()
     const accessToken = jwt.sign({ sub: courierId })
 
     const response = await request(app.getHttpServer())
-      .delete(`/courier/${courierId}`)
+      .delete(`/couriers/${courierId}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
