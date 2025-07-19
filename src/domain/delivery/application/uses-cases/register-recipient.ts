@@ -3,40 +3,42 @@ import { Recipient } from '@/domain/delivery/enterprise/entities/Recipient'
 import { RecipientAlreadyExistsError } from '@/core/errors/errors/recipient-already-exists-error'
 import { RecipientsRepository } from '../repositories/recipients-repository'
 import { getCoordinatesFromAddress } from '@/core/utils/get-cordinates-from-adreess'
+import { Injectable } from '@nestjs/common'
 
 export interface RegisterRecipientUseCaseRequest {
-    name: string
-    cpf: string
-    email: string
-    phone: string
-    zipCode: string
-    address: string
-    neighborhood: string
-    state: string
+  name: string
+  cpf: string
+  email: string
+  phone: string
+  zipCode: string
+  address: string
+  neighborhood: string
+  state: string
 }
 
 type RegisterRecipientUseCaseResponse = Either<RecipientAlreadyExistsError, { recipient: Recipient }>
 
+@Injectable()
 export class RegisterRecipientUseCase {
 
-  constructor(private recipientsRepository: RecipientsRepository) {}
+  constructor(private recipientsRepository: RecipientsRepository) { }
 
-  async execute({ 
-    name, 
-    cpf, 
-    email, 
-    phone, 
-    zipCode, 
-    address, 
-    neighborhood, 
-    state 
+  async execute({
+    name,
+    cpf,
+    email,
+    phone,
+    zipCode,
+    address,
+    neighborhood,
+    state
   }: RegisterRecipientUseCaseRequest): Promise<RegisterRecipientUseCaseResponse> {
     const recipientWithSameEmail = await this.recipientsRepository.findByEmail(email)
 
     if (recipientWithSameEmail) {
       return failure(new RecipientAlreadyExistsError())
     }
-    
+
     const fullAddress = `${address}, ${neighborhood}, ${zipCode}, ${state}`
 
     const coordinates = await getCoordinatesFromAddress(fullAddress)

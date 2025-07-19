@@ -9,6 +9,8 @@ import { CreateCourierAccountController } from './controllers/create-courier-acc
 import { ChangeAdminPasswordController } from './controllers/change-admin-password.controller'
 import { AuthenticateCourierController } from './controllers/authenticate-courier.controller'
 import { ChangeCourierPasswordController } from './controllers/change-courier-password.controller'
+import { EditCourierController } from './controllers/edit-courier.controller'
+import { RegisterRecipientController } from './controllers/register-recipient.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
@@ -17,8 +19,8 @@ import { ChangeAdminPasswordUseCase } from '@/domain/delivery/application/uses-c
 import { RegisterCourierUseCase } from '@/domain/delivery/application/uses-cases/register-courier'
 import { AuthenticateCourierUseCase } from '@/domain/delivery/application/uses-cases/authenticate-courier'
 import { ChangeCourierPasswordUseCase } from '@/domain/delivery/application/uses-cases/change-courier-password'
-import { EditCourierController } from './controllers/edit-courier.controller'
 import { EditCourierUseCase } from '@/domain/delivery/application/uses-cases/edit-courier'
+import { RegisterRecipientUseCase } from '@/domain/delivery/application/uses-cases/register-recipient'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -30,7 +32,8 @@ import { EditCourierUseCase } from '@/domain/delivery/application/uses-cases/edi
     CreateCourierAccountController,
     AuthenticateCourierController,
     ChangeCourierPasswordController,
-    EditCourierController
+    EditCourierController,
+    RegisterRecipientController
   ],
   providers:[
     RegisterAdminUseCase,
@@ -40,7 +43,8 @@ import { EditCourierUseCase } from '@/domain/delivery/application/uses-cases/edi
     RegisterCourierUseCase,
     AuthenticateCourierUseCase,
     ChangeCourierPasswordUseCase,
-    EditCourierUseCase
+    EditCourierUseCase,
+    RegisterRecipientUseCase
   ]
 })
 export class HttpModule {}

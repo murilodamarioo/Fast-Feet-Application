@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { Either, failure, success } from '@/core/either'
 import { RecipientsRepository } from '../repositories/recipients-repository'
 import { RecipientNotFoundError } from '@/core/errors/errors/recipient-not-found-error'
@@ -17,11 +19,12 @@ export interface EditRecipientUseCaseRequest {
 
 type EditCourierUseCaseResponse = Either<RecipientNotFoundError, { recipient: Recipient }>
 
+@Injectable()
 export class EditRecipientUseCase {
 
-  constructor(private recipientsRepository: RecipientsRepository) {}
+  constructor(private recipientsRepository: RecipientsRepository) { }
 
-  async execute({ 
+  async execute({
     recipientId,
     name,
     cpf,
@@ -31,7 +34,7 @@ export class EditRecipientUseCase {
     address,
     neighborhood,
     state
-   }: EditRecipientUseCaseRequest): Promise<EditCourierUseCaseResponse> {
+  }: EditRecipientUseCaseRequest): Promise<EditCourierUseCaseResponse> {
     const recipient = await this.recipientsRepository.findById(recipientId)
 
     if (!recipient) {
