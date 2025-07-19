@@ -15,7 +15,7 @@ const changeAdminPasswordBodySchema = z.object({
 
 type ChangeAdminPasswordBodySchema = z.infer<typeof changeAdminPasswordBodySchema>
 
-@Controller('/admin/change-password')
+@Controller('/accounts/admin/change-password')
 export class ChangeAdminPasswordController {
 
   constructor(private changeAdminPassword: ChangeAdminPasswordUseCase) {}

@@ -32,7 +32,7 @@ describe('Change Admin password (E2E)', () => {
     await app.init()
   })
 
-  test('[PUT] /admin/change-password', async () => {
+  test('[PUT] /accounts/admin/change-password', async () => {
     const admin = await adminFactory.makePrismaAdmin({
       password: await hash('12345', 8)
     })
@@ -42,7 +42,7 @@ describe('Change Admin password (E2E)', () => {
     const newPassword = 'Qjbcuw@wo_123'
 
     const response = await request(app.getHttpServer())
-      .put('/admin/change-password')
+      .put('/accounts/admin/change-password')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         password: newPassword
