@@ -1,6 +1,7 @@
 import { RecipientNotFoundError } from '@/core/errors/errors/recipient-not-found-error'
 import { GetRecipientUseCase } from '@/domain/delivery/application/uses-cases/get-recipient'
 import { BadRequestException, Controller, Get, HttpCode, InternalServerErrorException, Param } from '@nestjs/common'
+import { RecipientPresenter } from '../presenters/recipient-presenter'
 
 @Controller('/recipients/:id')
 export class GetRecipientController {
@@ -25,6 +26,6 @@ export class GetRecipientController {
       }
     }
 
-    return { response }
+    return { recipient: RecipientPresenter.toHTTP(response.value.recipient) }
   }
 }

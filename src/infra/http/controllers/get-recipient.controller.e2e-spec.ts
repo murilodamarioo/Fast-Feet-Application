@@ -45,15 +45,18 @@ describe('Get recipient (E2E)', () => {
     console.log(JSON.stringify(response.body))
 
     expect(response.status).toBe(200)
-    expect(response.body.response.value.recipient.props).toEqual({
-      name: recipient.name,
-      email: recipient.email,
-      cpf: recipient.cpf,
-      phone: recipient.phone,
-      zipCode: recipient.zipCode,
-      address: recipient.address,
-      neighborhood: recipient.neighborhood,
-      state: recipient.state
+    expect(response.body).toEqual({
+      recipient: expect.objectContaining({
+        id: recipient.id.toString(),
+        name: recipient.name,
+        email: recipient.email,
+        cpf: recipient.cpf,
+        address: recipient.address,
+        phone: recipient.phone,
+        neighborhood: recipient.neighborhood,
+        state: recipient.state,
+        zipCode: recipient.zipCode,
+      }),
     })
   })
 })
