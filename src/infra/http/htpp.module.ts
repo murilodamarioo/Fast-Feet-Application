@@ -14,6 +14,7 @@ import { RegisterRecipientController } from './controllers/register-recipient.co
 import { DeleteCourierController } from './controllers/delete-courier.controller'
 import { DeleteRecipientController } from './controllers/delete-recipient.controller'
 import { GetRecipientController } from './controllers/get-recipient.controller'
+import { GetOrderDetailsController } from './controllers/get-order-details.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
@@ -27,6 +28,7 @@ import { RegisterRecipientUseCase } from '@/domain/delivery/application/uses-cas
 import { DeleteCourierUseCase } from '@/domain/delivery/application/uses-cases/delete-courier'
 import { DeleteRecipientUseCase } from '@/domain/delivery/application/uses-cases/delete-recipient'
 import { GetRecipientUseCase } from '@/domain/delivery/application/uses-cases/get-recipient'
+import { GetOrderDetailsUseCase } from '@/domain/delivery/application/uses-cases/get-order-details'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -42,7 +44,8 @@ import { GetRecipientUseCase } from '@/domain/delivery/application/uses-cases/ge
     RegisterRecipientController,
     DeleteCourierController,
     DeleteRecipientController,
-    GetRecipientController
+    GetRecipientController,
+    GetOrderDetailsController
   ],
   providers: [
     RegisterAdminUseCase,
@@ -56,7 +59,8 @@ import { GetRecipientUseCase } from '@/domain/delivery/application/uses-cases/ge
     RegisterRecipientUseCase,
     DeleteCourierUseCase,
     DeleteRecipientUseCase,
-    GetRecipientUseCase
+    GetRecipientUseCase,
+    GetOrderDetailsUseCase
   ]
 })
 export class HttpModule { }

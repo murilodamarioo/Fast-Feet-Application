@@ -26,7 +26,7 @@ export class OrderDetails extends ValueObject<OrderDetailsProps> {
   
   get recipient() { return this.props.recipient }
 
-  get adress() { return this.props.address }
+  get address() { return this.props.address }
 
   get neighborhood() { return this.props.neighborhood }
 

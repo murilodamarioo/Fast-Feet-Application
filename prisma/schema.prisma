@@ -55,6 +55,9 @@ model Order {
   status      OrderStatus @default(CREATED)
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime?   @updatedAt @map("updated_at")
+  postedAt    DateTime?   @map("posted_at")
+  pickedUpAt  DateTime?   @map("picked_up_at")
+  deliveredAt DateTime?   @map("delivered_at")
   recipientId String      @map("recipient_id")
   courierId   String      @map("courier_id")
 

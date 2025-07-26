@@ -4,7 +4,6 @@ import { makeOrder } from 'test/factories/make-order'
 import { makeCourier } from 'test/factories/make-courier'
 import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
 import { makeRecipient } from 'test/factories/make-recipient'
-import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 let sut: GetOrderDetailsUseCase
 let inMemoryRecipientReposiotry: InMemoryRecipientRepository
@@ -38,7 +37,6 @@ describe('Get Order', () => {
 
     const response = await sut.execute({
       orderId: order.id.toString(),
-      courierId: courier.id.toString(),
     })
 
     expect(response.isSuccess()).toBeTruthy()
@@ -51,31 +49,6 @@ describe('Get Order', () => {
         })
       })
     })
-  })
-
-  it('should not be able to get a order with invalid courier ID', async () => {
-    const recipient = makeRecipient({
-      name: 'John Doe',
-      address: '123 Main St',
-      neighborhood: 'Downtown',
-    })
-    inMemoryRecipientReposiotry.recipients.push(recipient)
-
-    const courier = makeCourier()
-
-    const order = makeOrder({
-      courierId: courier.id,
-      recipientId: recipient.id,
-    })
-    inMemoryOrdersRepository.orders.push(order)
-
-    const response = await sut.execute({
-      orderId: order.id.toString(),
-      courierId: 'invalid-courier-id',
-    })
-
-    expect(response.isFailure()).toBeTruthy()
-    expect(response.value).toBeInstanceOf(NotAllowedError)
   })
 
 })
