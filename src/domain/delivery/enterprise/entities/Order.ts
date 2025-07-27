@@ -6,6 +6,7 @@ import { OrderPhoto } from './Order-Photo'
 import { ChangeStatusEvent } from '../events/change-status-event'
 
 export interface OrderProps {
+  id: UniqueEntityId
   recipientId: UniqueEntityId
   courierId: UniqueEntityId
   orderName: string
@@ -19,6 +20,8 @@ export interface OrderProps {
 }
 
 export class Order extends AggregateRoot<OrderProps> {
+
+  get id() { return this.props.id }
 
   get recipientId() { return this.props.recipientId }
 

@@ -16,6 +16,7 @@ import { DeleteRecipientController } from './controllers/delete-recipient.contro
 import { GetRecipientController } from './controllers/get-recipient.controller'
 import { GetOrderDetailsController } from './controllers/get-order-details.controller'
 import { FetchCourierOrdersController } from './controllers/fetch-courier-orders.controller'
+import { SetOrderStatusToPickedUpController } from './controllers/set-order-status-to-picked-up.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
@@ -31,6 +32,7 @@ import { DeleteRecipientUseCase } from '@/domain/delivery/application/uses-cases
 import { GetRecipientUseCase } from '@/domain/delivery/application/uses-cases/get-recipient'
 import { GetOrderDetailsUseCase } from '@/domain/delivery/application/uses-cases/get-order-details'
 import { FetchCourierOrdersByStatusUseCase } from '@/domain/delivery/application/uses-cases/fetch-courier-orders-by-status'
+import { SetOrderStatusToPickedUpUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-picked-up'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -48,7 +50,8 @@ import { FetchCourierOrdersByStatusUseCase } from '@/domain/delivery/application
     DeleteRecipientController,
     GetRecipientController,
     GetOrderDetailsController,
-    FetchCourierOrdersController
+    FetchCourierOrdersController,
+    SetOrderStatusToPickedUpController
   ],
   providers: [
     RegisterAdminUseCase,
@@ -64,7 +67,8 @@ import { FetchCourierOrdersByStatusUseCase } from '@/domain/delivery/application
     DeleteRecipientUseCase,
     GetRecipientUseCase,
     GetOrderDetailsUseCase,
-    FetchCourierOrdersByStatusUseCase
+    FetchCourierOrdersByStatusUseCase,
+    SetOrderStatusToPickedUpUseCase
   ]
 })
 export class HttpModule { }

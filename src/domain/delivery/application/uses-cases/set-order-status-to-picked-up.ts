@@ -3,6 +3,7 @@ import { OrdersRepository } from '../repositories/orders-repository'
 import { OrderNotFoundError } from '@/core/errors/errors/order-not-found-error'
 import { Status, StatusUtils } from '@/domain/delivery/enterprise/entities/value-object.ts/Status'
 import { SetOrderStatusError } from '@/core/errors/errors/set-order-status-error'
+import { Injectable } from '@nestjs/common'
 
 export interface SetOrderStatusToPickedUpUseCaseRequest {
   orderId: string
@@ -10,9 +11,10 @@ export interface SetOrderStatusToPickedUpUseCaseRequest {
 
 type SetOrderStatusToPickedUpUseCaseResponse = Either<OrderNotFoundError | SetOrderStatusError, null>
 
+@Injectable()
 export class SetOrderStatusToPickedUpUseCase {
-  
-  constructor(private ordersRepository: OrdersRepository) {}
+
+  constructor(private ordersRepository: OrdersRepository) { }
 
   async execute(
     { orderId }: SetOrderStatusToPickedUpUseCaseRequest

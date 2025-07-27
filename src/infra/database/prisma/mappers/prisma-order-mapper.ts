@@ -6,10 +6,36 @@ import { OrderStatus, Prisma, Order as PrismaOrder } from '@prisma/client'
 export class PrismaOrderMapper {
 
   static toDomain(raw: PrismaOrder): Order {
+
+    const status = raw.status
+    let domainStatus: Status
+
+    switch (status) {
+      case OrderStatus.CREATED:
+        domainStatus = Status.CREATED
+        break
+      case OrderStatus.PENDING:
+        domainStatus = Status.PENDING
+        break
+      case OrderStatus.PICKED_UP:
+        domainStatus = Status.PICKED_UP
+        break
+      case OrderStatus.DELIVERED:
+        domainStatus = Status.DELIVERED
+        break
+      case OrderStatus.RETURNED:
+        domainStatus = Status.RETURNED
+        break
+      default:
+        throw new Error(`Status nao suportado: ${status}`)
+    }
+
     return Order.create({
+      id: new UniqueEntityId(raw.id),
       orderName: raw.title,
       recipientId: new UniqueEntityId(raw.recipientId),
       courierId: new UniqueEntityId(raw.courierId),
+      status: domainStatus,
       postedAt: null,
       pickedUp: null,
       deliveredAt: null
