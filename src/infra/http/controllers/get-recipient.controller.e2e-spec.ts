@@ -42,8 +42,6 @@ describe('Get recipient (E2E)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
-    console.log(JSON.stringify(response.body))
-
     expect(response.status).toBe(200)
     expect(response.body).toEqual({
       recipient: expect.objectContaining({
