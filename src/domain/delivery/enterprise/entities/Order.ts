@@ -25,7 +25,7 @@ export class Order extends AggregateRoot<OrderProps> {
   get courierId() { return this.props.courierId }
 
   get orderName() { return this.props.orderName }
-  set orderName(orderName: string) { 
+  set orderName(orderName: string) {
     this.props.orderName = `Package ${orderName}`
     this.touch()
   }
@@ -98,17 +98,17 @@ export class Order extends AggregateRoot<OrderProps> {
    * @note The `createdAt` property will default to the current date if not provided.
    */
   static create(
-      props: Optional<OrderProps, | 'photo' | 'status' | 'createdAt'>, 
-      id?: UniqueEntityId
-    ): Order {
-      const order = new Order({
-        ...props,
-        createdAt: props.createdAt ?? new Date(),
-        photo: props.photo ?? null,
-        status: props.status ?? Status.CREATED,
-      }, id)
+    props: Optional<OrderProps, | 'photo' | 'status' | 'createdAt'>,
+    id?: UniqueEntityId
+  ): Order {
+    const order = new Order({
+      ...props,
+      createdAt: props.createdAt ?? new Date(),
+      photo: props.photo ?? null,
+      status: props.status ?? Status.CREATED,
+    }, id)
 
-      return order
-    }
-  
+    return order
+  }
+
 } 

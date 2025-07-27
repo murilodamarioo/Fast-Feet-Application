@@ -13,6 +13,7 @@ export function makeOrder(override: Partial<OrderProps> = {}, id?: UniqueEntityI
     postedAt: override.postedAt ?? null,
     pickedUp: override.pickedUp ?? null,
     deliveredAt: override.deliveredAt ?? null,
+    status: override.status ?? undefined,
     ...override
   }, id)
 

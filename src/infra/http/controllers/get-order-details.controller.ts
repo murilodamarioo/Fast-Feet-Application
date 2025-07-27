@@ -2,7 +2,7 @@ import { OrderNotFoundError } from '@/core/errors/errors/order-not-found-error'
 import { GetOrderDetailsUseCase } from '@/domain/delivery/application/uses-cases/get-order-details'
 import { Roles } from '@/infra/permission/roles.decorator';
 import { BadRequestException, Controller, Get, HttpCode, NotFoundException, Param } from '@nestjs/common'
-import { OrderPresenter } from '../presenters/order-presenter';
+import { OrderDetailsPresenter } from '../presenters/order-details-presenter';
 
 @Controller('/orders/:id')
 export class GetOrderDetailsController {
@@ -25,6 +25,6 @@ export class GetOrderDetailsController {
       }
     }
 
-    return { order: OrderPresenter.toHTTP(response.value.order) }
+    return { order: OrderDetailsPresenter.toHTTP(response.value.order) }
   }
 }

@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common'
 import { Either, failure, success } from '@/core/either'
 import { OrdersRepository } from '../repositories/orders-repository'
 import { CouriersRepository } from '../repositories/couriers-repository'
@@ -12,6 +13,7 @@ export interface FetchCourierOrdersByStatusUseCaseRequest {
 
 type FetchCourierOrdersByStatusUseCaseResponse = Either<CourierNotFoundError, { orders: Order[] }>
 
+@Injectable()
 export class FetchCourierOrdersByStatusUseCase {
 
   constructor(

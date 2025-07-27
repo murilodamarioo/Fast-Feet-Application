@@ -15,6 +15,7 @@ import { DeleteCourierController } from './controllers/delete-courier.controller
 import { DeleteRecipientController } from './controllers/delete-recipient.controller'
 import { GetRecipientController } from './controllers/get-recipient.controller'
 import { GetOrderDetailsController } from './controllers/get-order-details.controller'
+import { FetchCourierOrdersController } from './controllers/fetch-courier-orders.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
@@ -29,6 +30,7 @@ import { DeleteCourierUseCase } from '@/domain/delivery/application/uses-cases/d
 import { DeleteRecipientUseCase } from '@/domain/delivery/application/uses-cases/delete-recipient'
 import { GetRecipientUseCase } from '@/domain/delivery/application/uses-cases/get-recipient'
 import { GetOrderDetailsUseCase } from '@/domain/delivery/application/uses-cases/get-order-details'
+import { FetchCourierOrdersByStatusUseCase } from '@/domain/delivery/application/uses-cases/fetch-courier-orders-by-status'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -45,7 +47,8 @@ import { GetOrderDetailsUseCase } from '@/domain/delivery/application/uses-cases
     DeleteCourierController,
     DeleteRecipientController,
     GetRecipientController,
-    GetOrderDetailsController
+    GetOrderDetailsController,
+    FetchCourierOrdersController
   ],
   providers: [
     RegisterAdminUseCase,
@@ -60,7 +63,8 @@ import { GetOrderDetailsUseCase } from '@/domain/delivery/application/uses-cases
     DeleteCourierUseCase,
     DeleteRecipientUseCase,
     GetRecipientUseCase,
-    GetOrderDetailsUseCase
+    GetOrderDetailsUseCase,
+    FetchCourierOrdersByStatusUseCase
   ]
 })
 export class HttpModule { }
