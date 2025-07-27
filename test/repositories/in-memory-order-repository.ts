@@ -3,12 +3,13 @@ import { Order } from '@/domain/delivery/enterprise/entities/Order'
 import { InMemoryRecipientRepository } from './in-memory-recipient-repository'
 import { OrderDetails } from '@/domain/delivery/enterprise/entities/value-object.ts/order-details'
 import { DomainEvents } from '@/core/events/domain-events'
+import { PaginationParam } from '@/core/repositories/pagination-param'
 
 export class InMemoryOrderRepository implements OrdersRepository {
-  
+
   public orders: Order[] = []
 
-  constructor(private inMemoryRecipientRepository: InMemoryRecipientRepository) {}
+  constructor(private inMemoryRecipientRepository: InMemoryRecipientRepository) { }
 
   async findById(id: string): Promise<Order | null> {
     const order = this.orders.find((order) => order.id.toString() === id)
@@ -22,7 +23,7 @@ export class InMemoryOrderRepository implements OrdersRepository {
 
   async findOrderDetailsById(id: string): Promise<OrderDetails | null> {
     const order = this.orders.find((order) => order.id.toString() === id)
-    
+
     if (!order) {
       return null
     }
@@ -55,10 +56,10 @@ export class InMemoryOrderRepository implements OrdersRepository {
     return orderDetails
   }
 
-  async findManyByStatus(courierId: string, status: string): Promise<Order[]> {
-    const orders = this.orders.filter((order) => 
-      order.courierId.toString() === courierId && order.status === status 
-    )
+  async findManyByStatus(courierId: string, status: string, { page }: PaginationParam): Promise<Order[]> {
+    const orders = this.orders
+      .filter((order) => order.courierId.toString() === courierId && order.status === status)
+      .slice((page - 1) * 10, page * 10)
 
     return orders
   }

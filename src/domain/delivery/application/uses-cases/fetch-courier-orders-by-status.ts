@@ -7,28 +7,29 @@ import { Order } from '@/domain/delivery/enterprise/entities/Order'
 export interface FetchCourierOrdersByStatusUseCaseRequest {
   courierId: string
   status: string
+  page: number
 }
 
-type FetchCourierOrdersByStatusUseCaseResponse = Either<CourierNotFoundError , { orders: Order[] }>
+type FetchCourierOrdersByStatusUseCaseResponse = Either<CourierNotFoundError, { orders: Order[] }>
 
 export class FetchCourierOrdersByStatusUseCase {
 
   constructor(
-    private ordersReposiotory: OrdersRepository,
+    private ordersRepository: OrdersRepository,
     private couriersRepository: CouriersRepository
-  ) {}
+  ) { }
 
   async execute(
-    { courierId, status }: FetchCourierOrdersByStatusUseCaseRequest
+    { courierId, status, page }: FetchCourierOrdersByStatusUseCaseRequest
   ): Promise<FetchCourierOrdersByStatusUseCaseResponse> {
 
     const courier = await this.couriersRepository.findById(courierId)
-  
+
     if (!courier) {
       return failure(new CourierNotFoundError())
     }
 
-    const orders = await this.ordersReposiotory.findManyByStatus(courierId, status)
+    const orders = await this.ordersRepository.findManyByStatus(courierId, status, { page })
 
     return success({ orders })
   }

@@ -15,15 +15,15 @@ export namespace StatusUtils {
   export function isPending(status: Status) {
     return status === Status.PENDING
   }
-  
+
   export function isPickedUp(status: Status) {
     return status === Status.PICKED_UP
   }
-  
+
   export function isDelivered(status: Status) {
     return status === Status.DELIVERED
   }
-  
+
   export function isReturned(status: Status) {
     return status === Status.RETURNED
   }

@@ -7,6 +7,8 @@ import { PrismaService } from '../prisma.service'
 import { PrismaOrderMapper } from '../mappers/prisma-order-mapper'
 import { RecipientsRepository } from '@/domain/delivery/application/repositories/recipients-repository'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { PaginationParam } from '@/core/repositories/pagination-param'
+import { convertStatus } from '@/core/utils/convert-status'
 
 @Injectable()
 export class PrismaOrdersRepository implements OrdersRepository {
@@ -57,8 +59,19 @@ export class PrismaOrdersRepository implements OrdersRepository {
     })
   }
 
-  async findManyByStatus(courierId: string, status: string): Promise<Order[]> {
-    throw new Error('Method not implemented.')
+  async findManyByStatus(courierId: string, status: string, { page }: PaginationParam): Promise<Order[]> {
+    const statusConverted = convertStatus(status)
+
+    const orders = await this.prisma.order.findMany({
+      where: {
+        courierId,
+        status: statusConverted
+      },
+      skip: (page - 1) * 10,
+      take: 10
+    })
+
+    return orders.map(PrismaOrderMapper.toDomain)
   }
 
   async create(order: Order): Promise<void> {

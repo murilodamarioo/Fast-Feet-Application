@@ -1,3 +1,4 @@
+import { PaginationParam } from '@/core/repositories/pagination-param';
 import { Order } from '@/domain/delivery/enterprise/entities/Order'
 import { OrderDetails } from '@/domain/delivery/enterprise/entities/value-object.ts/order-details';
 
@@ -18,17 +19,18 @@ export abstract class OrdersRepository {
    * @param {string} id - The unique identifier of the order.
    * @returns {Promise<OrderDetails | null>} A promise that resolves to the `OrderDetails` object if found, or null if not found.
    */
-  abstract findOrderDetailsById(id: string): Promise<OrderDetails | null> 
+  abstract findOrderDetailsById(id: string): Promise<OrderDetails | null>
 
   /**
    * Retrieves all orders for a specific courier filtered by status.
    *
    * @param {string} courierId - The unique identifier of the courier.
    * @param {string} status - The status to filter orders by.
+   * @param {PaginationParam} params - The pagination parameters.
    * @returns {Promise<Order[]>} A promise that resolves to an array of orders matching the criteria.
    */
-  abstract findManyByStatus(courierId: string, status: string): Promise<Order[]>
-  
+  abstract findManyByStatus(courierId: string, status: string, params: PaginationParam): Promise<Order[]>
+
   /**
    * Persists a new `Order` entity in the repository.
    *

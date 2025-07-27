@@ -38,7 +38,7 @@ describe('Fetch Orders by Status', () => {
       await inMemoryOrdersRepository.create(order)
     }
 
-    const response = await sut.execute({ courierId: courier.id.toString(), status: Status.DELIVERED })
+    const response = await sut.execute({ courierId: courier.id.toString(), status: Status.DELIVERED, page: 1 })
 
     expect(response.isSuccess()).toBeTruthy()
     if (response.isSuccess()) {
@@ -63,7 +63,7 @@ describe('Fetch Orders by Status', () => {
       await inMemoryOrdersRepository.create(order)
     }
 
-    const response = await sut.execute({ courierId: courier.id.toString(), status: Status.PENDING })
+    const response = await sut.execute({ courierId: courier.id.toString(), status: Status.PENDING, page: 1 })
 
     expect(response.isSuccess()).toBeTruthy()
     if (response.isSuccess()) {
