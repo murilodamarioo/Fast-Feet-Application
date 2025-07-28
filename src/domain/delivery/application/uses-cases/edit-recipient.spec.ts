@@ -31,11 +31,6 @@ describe('Edit Recipient', () => {
     })
 
     expect(response.isSuccess()).toBeTruthy()
-    expect(response.value).toMatchObject({
-      recipient: expect.objectContaining({
-        name: 'John Doe'
-      })
-    })
   })
 
   it('should not be able to edit a recipient with an invalid ID', async () => {

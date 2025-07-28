@@ -7,17 +7,17 @@ import { Recipient } from '@/domain/delivery/enterprise/entities/Recipient'
 
 export interface EditRecipientUseCaseRequest {
   recipientId: string
-  name: string
-  cpf: string
-  email: string
-  phone: string
-  zipCode: string
-  address: string
-  neighborhood: string
-  state: string
+  name?: string
+  cpf?: string
+  email?: string
+  phone?: string
+  zipCode?: string
+  address?: string
+  neighborhood?: string
+  state?: string
 }
 
-type EditCourierUseCaseResponse = Either<RecipientNotFoundError, { recipient: Recipient }>
+type EditCourierUseCaseResponse = Either<RecipientNotFoundError, null>
 
 @Injectable()
 export class EditRecipientUseCase {
@@ -41,17 +41,17 @@ export class EditRecipientUseCase {
       return failure(new RecipientNotFoundError())
     }
 
-    recipient.name = name
-    recipient.cpf = cpf
-    recipient.email = email
-    recipient.phone = phone
-    recipient.zipCode = zipCode
-    recipient.address = address
-    recipient.neighborhood = neighborhood
-    recipient.state = state
+    recipient.name = name || recipient.name
+    recipient.cpf = cpf || recipient.cpf
+    recipient.email = email || recipient.email
+    recipient.phone = phone || recipient.phone
+    recipient.zipCode = zipCode || recipient.zipCode
+    recipient.address = address || recipient.address
+    recipient.neighborhood = neighborhood || recipient.neighborhood
+    recipient.state = state || recipient.state
 
     await this.recipientsRepository.save(recipient)
 
-    return success({ recipient })
+    return success(null)
   }
 }

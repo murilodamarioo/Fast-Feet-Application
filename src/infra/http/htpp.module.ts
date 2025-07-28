@@ -17,6 +17,7 @@ import { GetRecipientController } from './controllers/get-recipient.controller'
 import { GetOrderDetailsController } from './controllers/get-order-details.controller'
 import { FetchCourierOrdersController } from './controllers/fetch-courier-orders.controller'
 import { SetOrderStatusToPickedUpController } from './controllers/set-order-status-to-picked-up.controller'
+import { EditRecipientController } from './controllers/edit-recpient.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
@@ -33,6 +34,7 @@ import { GetRecipientUseCase } from '@/domain/delivery/application/uses-cases/ge
 import { GetOrderDetailsUseCase } from '@/domain/delivery/application/uses-cases/get-order-details'
 import { FetchCourierOrdersByStatusUseCase } from '@/domain/delivery/application/uses-cases/fetch-courier-orders-by-status'
 import { SetOrderStatusToPickedUpUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-picked-up'
+import { EditRecipientUseCase } from '@/domain/delivery/application/uses-cases/edit-recipient'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -51,7 +53,8 @@ import { SetOrderStatusToPickedUpUseCase } from '@/domain/delivery/application/u
     GetRecipientController,
     GetOrderDetailsController,
     FetchCourierOrdersController,
-    SetOrderStatusToPickedUpController
+    SetOrderStatusToPickedUpController,
+    EditRecipientController
   ],
   providers: [
     RegisterAdminUseCase,
@@ -68,7 +71,8 @@ import { SetOrderStatusToPickedUpUseCase } from '@/domain/delivery/application/u
     GetRecipientUseCase,
     GetOrderDetailsUseCase,
     FetchCourierOrdersByStatusUseCase,
-    SetOrderStatusToPickedUpUseCase
+    SetOrderStatusToPickedUpUseCase,
+    EditRecipientUseCase
   ]
 })
 export class HttpModule { }
