@@ -19,6 +19,7 @@ import { FetchCourierOrdersController } from './controllers/fetch-courier-orders
 import { SetOrderStatusToPickedUpController } from './controllers/set-order-status-to-picked-up.controller'
 import { EditRecipientController } from './controllers/edit-recpient.controller'
 import { GetCourierController } from './controllers/get-courier.controller'
+import { SetOrderStatusToPendingController } from './controllers/set-order-status-to-pending.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
@@ -37,6 +38,7 @@ import { FetchCourierOrdersByStatusUseCase } from '@/domain/delivery/application
 import { SetOrderStatusToPickedUpUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-picked-up'
 import { EditRecipientUseCase } from '@/domain/delivery/application/uses-cases/edit-recipient'
 import { GetCourierUseCase } from '@/domain/delivery/application/uses-cases/get-courier'
+import { SetOrderStatusToPendingUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-pending'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -58,6 +60,7 @@ import { GetCourierUseCase } from '@/domain/delivery/application/uses-cases/get-
     SetOrderStatusToPickedUpController,
     EditRecipientController,
     GetCourierController,
+    SetOrderStatusToPendingController,
   ],
   providers: [
     RegisterAdminUseCase,
@@ -76,7 +79,8 @@ import { GetCourierUseCase } from '@/domain/delivery/application/uses-cases/get-
     FetchCourierOrdersByStatusUseCase,
     SetOrderStatusToPickedUpUseCase,
     EditRecipientUseCase,
-    GetCourierUseCase
+    GetCourierUseCase,
+    SetOrderStatusToPendingUseCase
   ]
 })
 export class HttpModule { }

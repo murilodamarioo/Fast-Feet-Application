@@ -3,6 +3,7 @@ import { OrdersRepository } from '../repositories/orders-repository'
 import { OrderNotFoundError } from '@/core/errors/errors/order-not-found-error'
 import { SetOrderStatusError } from '@/core/errors/errors/set-order-status-error'
 import { Status, StatusUtils } from '@/domain/delivery/enterprise/entities/value-object.ts/Status'
+import { Injectable } from '@nestjs/common'
 
 export interface SetOrderStatusToPendingUseCaseRequest {
   orderId: string
@@ -10,6 +11,7 @@ export interface SetOrderStatusToPendingUseCaseRequest {
 
 type SetOrderStatusToPendingUseCaseResponse = Either<OrderNotFoundError | SetOrderStatusError, null>
 
+@Injectable()
 export class SetOrderStatusToPendingUseCase {
 
   constructor(private ordersRepository: OrdersRepository) {}
