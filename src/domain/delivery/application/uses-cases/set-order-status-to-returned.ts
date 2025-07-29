@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common'
 import { Either, failure, success } from '@/core/either'
 import { OrderNotFoundError } from '@/core/errors/errors/order-not-found-error'
 import { SetOrderStatusError } from '@/core/errors/errors/set-order-status-error'
@@ -10,8 +11,9 @@ export interface SetOrderStatusToReturnedRequest {
 
 type SetOrderStatusToReturnedResponse = Either<OrderNotFoundError | SetOrderStatusError, null>
 
+@Injectable()
 export class SetOrderStatusToReturnedUseCase {
-  constructor(private ordersRepository: OrdersRepository) {}
+  constructor(private ordersRepository: OrdersRepository) { }
 
   async execute(
     { orderId }: SetOrderStatusToReturnedRequest
