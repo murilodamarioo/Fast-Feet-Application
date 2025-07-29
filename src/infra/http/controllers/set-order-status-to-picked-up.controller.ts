@@ -29,7 +29,5 @@ export class SetOrderStatusToPickedUpController {
           throw new InternalServerErrorException(error.message)
       }
     }
-
-    return success(null)
   }
 }
