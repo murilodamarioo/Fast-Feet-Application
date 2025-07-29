@@ -4,26 +4,27 @@ import { INestApplication } from '@nestjs/common'
 
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
-import { CourierFactory } from 'test/factories/make-courier'
+
+import { AdminFactory } from 'test/factories/make-admin'
 import { RecipientFactory } from 'test/factories/make-recipient'
 
 import request from 'supertest'
 
 describe('Get recipient (E2E)', () => {
   let app: INestApplication
-  let courierFactory: CourierFactory
+  let adminFactory: AdminFactory
   let recipientFactory: RecipientFactory
   let jwt: JwtService
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [CourierFactory, RecipientFactory]
+      providers: [AdminFactory, RecipientFactory]
     }).compile()
 
     app = moduleRef.createNestApplication()
 
-    courierFactory = moduleRef.get(CourierFactory)
+    adminFactory = moduleRef.get(AdminFactory)
     recipientFactory = moduleRef.get(RecipientFactory)
 
     jwt = moduleRef.get(JwtService)
@@ -32,8 +33,8 @@ describe('Get recipient (E2E)', () => {
   })
 
   test('[GET] /recipients/:id', async () => {
-    const courier = await courierFactory.makePrismaCourier()
-    const accessToken = jwt.sign({ sub: courier.id.toString() })
+    const admin = await adminFactory.makePrismaAdmin()
+    const accessToken = jwt.sign({ sub: admin.id.toString() })
 
     const recipient = await recipientFactory.makePrismaRecipient()
 
