@@ -68,4 +68,24 @@ describe('Set order status to pending (E2E)', () => {
 
     expect(orderOnDatabase?.status).toBe(OrderStatus.PENDING)
   })
+
+  test('[PUT] /orders/:id/pending - Forbidden', async () => {
+    const courier = await courierFactory.makePrismaCourier()
+    const accessToken = jwt.sign({ sub: courier.id.toString() })
+
+    const recipient = await recipientFactory.makePrismaRecipient()
+
+    const order = await orderFactory.makePrismaOrder({
+      courierId: courier.id,
+      recipientId: recipient.id
+    })
+    const orderId = order.id.toString()
+
+    const response = await request(app.getHttpServer())
+      .put(`/orders/${orderId}/pending`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+
+    expect(response.status).toBe(403)
+  })
 })

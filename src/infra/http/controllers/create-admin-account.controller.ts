@@ -1,9 +1,10 @@
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe';
-import { BadRequestException, Body, ConflictException, Controller, HttpCode, Post, UsePipes } from '@nestjs/common'
+import { BadRequestException, Body, ConflictException, Controller, HttpCode, Post, UseGuards, UsePipes } from '@nestjs/common'
 import { z } from 'zod'
-import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin';
-import { UserAlreadyExistsError } from '@/core/errors/errors/user-already-exists-error';
-import { Public } from '@/infra/auth/public';
+import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
+import { UserAlreadyExistsError } from '@/core/errors/errors/user-already-exists-error'
+import { Public } from '@/infra/auth/public'
+
 
 const createAdminAccountBodySchema = z.object({
   name: z.string(),
@@ -18,7 +19,7 @@ type CreateAccountBodySchema = z.infer<typeof createAdminAccountBodySchema>
 @Public()
 export class CreateAdminAccountController {
 
-  constructor(private registerAdmin: RegisterAdminUseCase) {}
+  constructor(private registerAdmin: RegisterAdminUseCase) { }
 
   @Post()
   @HttpCode(201)

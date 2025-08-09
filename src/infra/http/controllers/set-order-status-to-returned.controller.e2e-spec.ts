@@ -72,4 +72,24 @@ describe('Set order status to returned (E2E)', () => {
 
     expect(orderOnDatabase?.status).toBe(OrderStatus.RETURNED)
   })
+
+  test('[PUT] /orders/:id/retuned - Forbidden', async () => {
+    const courier = await courierFactory.makePrismaCourier()
+    const accessToken = jwt.sign({ sub: courier.id.toString() })
+
+    const recipient = await recipientFactory.makePrismaRecipient()
+
+    const order = await orderFactory.makePrismaOrder({
+      courierId: courier.id,
+      recipientId: recipient.id,
+      status: Status.PICKED_UP
+    })
+
+    const response = await request(app.getHttpServer())
+      .put(`/orders/${order.id.toString()}/returned`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+
+    expect(response.status).toBe(403)
+  })
 })

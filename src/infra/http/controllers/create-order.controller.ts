@@ -1,11 +1,14 @@
-import { BadRequestException, Body, Controller, HttpCode, Post, UsePipes } from '@nestjs/common'
+import { BadRequestException, Body, Controller, HttpCode, Post, UseGuards, UsePipes } from '@nestjs/common'
 import { z } from 'zod'
 
 import { RecipientNotFoundError } from '@/core/errors/errors/recipient-not-found-error'
 
 import { CreateOrderUseCase } from '@/domain/delivery/application/uses-cases/create-order'
 
-import { Roles } from '@/infra/permission/roles.decorator'
+import { CheckRoles } from '@/infra/permission/roles.decorator'
+import { RolesGuard } from '@/infra/permission/roles.guard'
+import { Action, AppAbility } from '@/infra/permission/ability.factory'
+
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 
 
@@ -20,11 +23,14 @@ type CreateOrderBodySchema = z.infer<typeof createOrderBodySchema>
 @Controller('/order')
 export class CreateOrderController {
 
-  constructor(private createOrder: CreateOrderUseCase) {}
+  constructor(private createOrder: CreateOrderUseCase) { }
 
   @Post()
   @HttpCode(201)
-  @Roles(['ADMIN'])
+  @UseGuards(RolesGuard)
+  @CheckRoles((ability: AppAbility) => ability.can(
+    Action.CREATE, 'Order'
+  ))
   @UsePipes(new ZodValidationPipe(createOrderBodySchema))
   async handle(@Body() body: CreateOrderBodySchema) {
     const { orderName, courierId, recipientId } = body
@@ -37,7 +43,7 @@ export class CreateOrderController {
 
     if (response.isFailure()) {
       const error = response.value
-      
+
       switch (error.constructor) {
         case RecipientNotFoundError:
           throw new BadRequestException(error.message)

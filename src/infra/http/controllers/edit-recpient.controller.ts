@@ -1,9 +1,13 @@
 import { RecipientNotFoundError } from '@/core/errors/errors/recipient-not-found-error'
 import { EditRecipientUseCase } from '@/domain/delivery/application/uses-cases/edit-recipient'
-import { Roles } from '@/infra/permission/roles.decorator'
-import { BadRequestException, Body, Controller, HttpCode, InternalServerErrorException, Param, Put } from '@nestjs/common'
+import { BadRequestException, Body, Controller, HttpCode, InternalServerErrorException, Param, Put, UseGuards } from '@nestjs/common'
+
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+
+import { RolesGuard } from '@/infra/permission/roles.guard'
+import { CheckRoles } from '@/infra/permission/roles.decorator'
+import { Action, AppAbility } from '@/infra/permission/ability.factory'
 
 const editRecipientBodySchema = z.object({
   name: z.string().optional(),
@@ -27,7 +31,10 @@ export class EditRecipientController {
 
   @Put()
   @HttpCode(200)
-  @Roles(['ADMIN'])
+  @UseGuards(RolesGuard)
+  @CheckRoles((ability: AppAbility) =>
+    ability.can(Action.UPDATE, 'Recipient')
+  )
   async handle(
     @Param('id') id: string,
     @Body(bodyValidationPipe) body: EditRecipientBodySchema

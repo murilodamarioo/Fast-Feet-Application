@@ -1,8 +1,10 @@
-import { OrderNotFoundError } from "@/core/errors/errors/order-not-found-error";
-import { SetOrderStatusError } from "@/core/errors/errors/set-order-status-error";
-import { SetOrderStatusToReturnedUseCase } from "@/domain/delivery/application/uses-cases/set-order-status-to-returned";
-import { Roles } from "@/infra/permission/roles.decorator";
-import { BadRequestException, Controller, HttpCode, InternalServerErrorException, NotFoundException, Param, Put } from "@nestjs/common";
+import { OrderNotFoundError } from '@/core/errors/errors/order-not-found-error'
+import { SetOrderStatusError } from '@/core/errors/errors/set-order-status-error'
+import { SetOrderStatusToReturnedUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-returned'
+import { Action, AppAbility } from '@/infra/permission/ability.factory'
+import { CheckRoles } from '@/infra/permission/roles.decorator'
+import { RolesGuard } from '@/infra/permission/roles.guard'
+import { BadRequestException, Controller, HttpCode, InternalServerErrorException, NotFoundException, Param, Put, UseGuards } from '@nestjs/common'
 
 @Controller('/orders/:id/returned')
 export class SetOrderStatusToReturnedContoller {
@@ -11,7 +13,10 @@ export class SetOrderStatusToReturnedContoller {
 
   @Put()
   @HttpCode(200)
-  @Roles(['ADMIN'])
+  @UseGuards(RolesGuard)
+  @CheckRoles((ability: AppAbility) =>
+    ability.can(Action.RETURN, 'Order')
+  )
   async handle(@Param('id') id: string) {
     const response = await this.setOrderStatusToReturned.execute({ orderId: id })
 

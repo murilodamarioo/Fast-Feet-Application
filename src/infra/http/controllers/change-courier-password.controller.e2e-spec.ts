@@ -67,7 +67,7 @@ describe('Change courier password (E2E)', () => {
     expect(passwordMatches).toBeTruthy()
   })
 
-  test('[PUT] //courier/:courierId/change-password - Forbidden', async () => {
+  test('[PUT] /courier/:courierId/change-password - Forbidden', async () => {
     const courier = await courierFactory.makePrismaCourier()
     const courierId = courier.id.toString()
 

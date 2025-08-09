@@ -1,8 +1,10 @@
-import { success } from '@/core/either';
-import { OrderNotFoundError } from '@/core/errors/errors/order-not-found-error';
-import { SetOrderStatusError } from '@/core/errors/errors/set-order-status-error';
-import { SetOrderStatusToPickedUpUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-picked-up';
-import { BadRequestException, Controller, HttpCode, InternalServerErrorException, NotFoundException, Param, Put } from '@nestjs/common'
+import { OrderNotFoundError } from '@/core/errors/errors/order-not-found-error'
+import { SetOrderStatusError } from '@/core/errors/errors/set-order-status-error'
+import { SetOrderStatusToPickedUpUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-picked-up'
+import { Action, AppAbility } from '@/infra/permission/ability.factory'
+import { CheckRoles } from '@/infra/permission/roles.decorator'
+import { RolesGuard } from '@/infra/permission/roles.guard'
+import { BadRequestException, Controller, HttpCode, InternalServerErrorException, NotFoundException, Param, Put, UseGuards } from '@nestjs/common'
 
 @Controller('/orders/:id/pick-up')
 export class SetOrderStatusToPickedUpController {
@@ -11,6 +13,10 @@ export class SetOrderStatusToPickedUpController {
 
   @Put()
   @HttpCode(200)
+  @UseGuards(RolesGuard)
+  @CheckRoles((ability: AppAbility) =>
+    ability.can(Action.PICKUP, 'Order')
+  )
   async handle(@Param('id') id: string) {
 
     const response = await this.setOrderStatusToPickedUp.execute({

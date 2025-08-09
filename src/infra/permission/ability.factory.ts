@@ -14,7 +14,7 @@ export enum Action {
   DELIVER = 'deliver'
 }
 
-export type Subject = 'Courier' | 'Recipient' | 'Order' | 'all'
+export type Subject = 'Courier' | 'Recipient' | 'Order' | 'Admin' | 'all'
 
 export type AppAbility = MongoAbility<[Action, Subject]>
 
@@ -25,6 +25,13 @@ export class AbilityFactory {
     const { can, cannot, build } = new AbilityBuilder<AppAbility>(createMongoAbility)
 
     if (user.role === Role.ADMIN) {
+      can(Action.MANAGE, 'Admin')
+
+      if (requestParam !== user.id) {
+        cannot(Action.UPDATE, 'Admin')
+        cannot(Action.DELETE, 'Admin')
+      }
+
       can(Action.MANAGE, 'Courier')
       cannot(Action.PENDING, 'Courier')
       cannot(Action.PICKUP, 'Courier')
@@ -38,9 +45,7 @@ export class AbilityFactory {
       cannot(Action.DELIVER, 'Recipient')
 
       can(Action.MANAGE, 'Order')
-      cannot(Action.PENDING, 'Order')
       cannot(Action.PICKUP, 'Order')
-      cannot(Action.RETURN, 'Order')
       cannot(Action.DELIVER, 'Order')
     } else if (user.role === Role.COURIER) {
       if (requestParam === user.id) {
@@ -48,8 +53,10 @@ export class AbilityFactory {
         can(Action.UPDATE, 'Courier')
       }
 
+      can(Action.READ, 'Order')
       can(Action.PICKUP, 'Order')
       can(Action.DELIVER, 'Order')
+      cannot(Action.RETURN, 'Order')
     }
 
     return build({

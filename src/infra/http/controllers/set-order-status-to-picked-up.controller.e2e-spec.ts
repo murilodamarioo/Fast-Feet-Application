@@ -11,9 +11,11 @@ import request from 'supertest'
 import { RecipientFactory } from 'test/factories/make-recipient'
 import { Status } from '@/domain/delivery/enterprise/entities/value-object.ts/Status'
 import { OrderStatus } from '@prisma/client'
+import { AdminFactory } from 'test/factories/make-admin'
 
 describe('Set order status to picked up (E2E)', () => {
   let app: INestApplication
+  let adminFactory: AdminFactory
   let courierFactory: CourierFactory
   let orderFacotry: OrderFactory
   let recipientFactory: RecipientFactory
@@ -23,11 +25,12 @@ describe('Set order status to picked up (E2E)', () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [CourierFactory, OrderFactory, RecipientFactory]
+      providers: [AdminFactory, CourierFactory, OrderFactory, RecipientFactory]
     }).compile()
 
     app = moduleRef.createNestApplication()
 
+    adminFactory = moduleRef.get(AdminFactory)
     courierFactory = moduleRef.get(CourierFactory)
     recipientFactory = moduleRef.get(RecipientFactory)
     orderFacotry = moduleRef.get(OrderFactory)
@@ -65,5 +68,26 @@ describe('Set order status to picked up (E2E)', () => {
     })
 
     expect(orderOnDatabase?.status).toBe(OrderStatus.PICKED_UP)
+  })
+
+  test('[PUT] /orders/:id/pick-up - Forbidden', async () => {
+    const admin = await adminFactory.makePrismaAdmin()
+    const accessToken = jwt.sign({ sub: admin.id.toString() })
+
+    const recipient = await recipientFactory.makePrismaRecipient()
+
+    const order = await orderFacotry.makePrismaOrder({
+      courierId: admin.id,
+      recipientId: recipient.id,
+      status: Status.PENDING
+    })
+    const orderId = order.id.toString()
+
+    const response = await request(app.getHttpServer())
+      .put(`/orders/${orderId}/pick-up`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+
+    expect(response.status).toBe(403)
   })
 })

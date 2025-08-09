@@ -1,5 +1,5 @@
 import z from 'zod'
-import { BadRequestException, Body, Controller, HttpCode, Put, UnauthorizedException } from '@nestjs/common'
+import { BadRequestException, Body, Controller, HttpCode, Put, UnauthorizedException, UseGuards } from '@nestjs/common'
 
 import { ChangeAdminPasswordUseCase } from '@/domain/delivery/application/uses-cases/change-admin-password'
 
@@ -7,7 +7,6 @@ import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
 
 import { AdminNotFoundError } from '@/core/errors/errors/admin-not-found-error'
-import { Roles } from '@/infra/permission/roles.decorator'
 
 const changeAdminPasswordBodySchema = z.object({
   password: z.string()
@@ -18,10 +17,9 @@ type ChangeAdminPasswordBodySchema = z.infer<typeof changeAdminPasswordBodySchem
 @Controller('/accounts/admin/change-password')
 export class ChangeAdminPasswordController {
 
-  constructor(private changeAdminPassword: ChangeAdminPasswordUseCase) {}
+  constructor(private changeAdminPassword: ChangeAdminPasswordUseCase) { }
 
   @Put()
-  @Roles(['ADMIN'])
   @HttpCode(200)
   async handle(
     @Body() body: ChangeAdminPasswordBodySchema,
@@ -36,7 +34,7 @@ export class ChangeAdminPasswordController {
       adminId
     })
 
-     if (response.isFailure()) {
+    if (response.isFailure()) {
       const error = response.value
 
       switch (error.constructor) {

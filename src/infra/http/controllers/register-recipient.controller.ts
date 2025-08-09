@@ -1,9 +1,11 @@
 import { RegisterRecipientUseCase } from '@/domain/delivery/application/uses-cases/register-recipient'
-import { BadRequestException, Body, Controller, HttpCode, InternalServerErrorException, Post, UsePipes } from '@nestjs/common'
+import { BadRequestException, Body, Controller, HttpCode, InternalServerErrorException, Post, UseGuards, UsePipes } from '@nestjs/common'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { RecipientAlreadyExistsError } from '@/core/errors/errors/recipient-already-exists-error'
-import { Roles } from '@/infra/permission/roles.decorator'
+import { RolesGuard } from '@/infra/permission/roles.guard'
+import { CheckRoles } from '@/infra/permission/roles.decorator'
+import { Action, AppAbility } from '@/infra/permission/ability.factory'
 
 const registerRecipientBodySchema = z.object({
   name: z.string(),
@@ -25,8 +27,11 @@ export class RegisterRecipientController {
 
   @Post()
   @HttpCode(201)
-  @Roles(['ADMIN'])
   @UsePipes(new ZodValidationPipe(registerRecipientBodySchema))
+  @UseGuards(RolesGuard)
+  @CheckRoles((ability: AppAbility) =>
+    ability.can(Action.CREATE, 'Recipient')
+  )
   async handle(@Body() body: RegisterRecipientBodySchema) {
     const { name, cpf, email, phone, zipCode, address, neighborhood, state } = body
 

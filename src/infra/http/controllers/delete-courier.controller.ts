@@ -1,8 +1,11 @@
-import { BadRequestException, Controller, Delete, HttpCode, InternalServerErrorException, Param } from '@nestjs/common'
+import { BadRequestException, Controller, Delete, HttpCode, InternalServerErrorException, Param, UseGuards } from '@nestjs/common'
 
 import { CourierNotFoundError } from '@/core/errors/errors/courier-not-found-error'
 import { DeleteCourierUseCase } from '@/domain/delivery/application/uses-cases/delete-courier'
-import { Roles } from '@/infra/permission/roles.decorator'
+
+import { RolesGuard } from '@/infra/permission/roles.guard'
+import { Action, AppAbility } from '@/infra/permission/ability.factory'
+import { CheckRoles } from '@/infra/permission/roles.decorator'
 
 @Controller('/couriers/:id')
 export class DeleteCourierController {
@@ -11,7 +14,10 @@ export class DeleteCourierController {
 
   @Delete()
   @HttpCode(204)
-  @Roles(['ADMIN'])
+  @UseGuards(RolesGuard)
+  @CheckRoles((ability: AppAbility) =>
+    ability.can(Action.DELETE, 'Courier')
+  )
   async handle(@Param('id') id: string) {
     const response = await this.deleteCourier.execute({
       courierId: id

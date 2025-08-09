@@ -44,7 +44,8 @@ describe('Edit courier (E2E)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         name: 'John Doe',
-        cpf: '12345678'
+        cpf: '12345678',
+        email: courier.email
       })
 
     expect(response.statusCode).toBe(200)
@@ -56,5 +57,26 @@ describe('Edit courier (E2E)', () => {
     })
 
     expect(courierOnDatase).toBeTruthy()
+  })
+
+  test('[PUT] /accounts/courier/:id - Forbidden', async () => {
+    const courier = await courierFactory.makePrismaCourier({
+      email: 'john@gmail.com'
+    })
+    const courierOneId = courier.id.toString()
+
+    const courierForbidden = await courierFactory.makePrismaCourier()
+    const accessToken = jwt.sign({ sub: courierForbidden.id.toString() })
+
+    const response = await request(app.getHttpServer())
+      .put(`/accounts/courier/${courierOneId}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        name: 'John Doe',
+        cpf: '12345678',
+        email: courier.email
+      })
+
+    expect(response.statusCode).toBe(403)
   })
 })

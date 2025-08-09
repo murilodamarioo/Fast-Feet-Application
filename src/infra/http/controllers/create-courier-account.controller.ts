@@ -1,11 +1,14 @@
-import { Controller, HttpCode, Post, UsePipes, Body, BadRequestException, ConflictException } from '@nestjs/common'
+import { Controller, HttpCode, Post, UsePipes, Body, BadRequestException, ConflictException, UseGuards } from '@nestjs/common'
 
 import { z } from 'zod'
-
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 import { UserAlreadyExistsError } from '@/core/errors/errors/user-already-exists-error'
 import { RegisterCourierUseCase } from '@/domain/delivery/application/uses-cases/register-courier'
+
+import { RolesGuard } from '@/infra/permission/roles.guard'
+import { CheckRoles } from '@/infra/permission/roles.decorator'
+import { Action, AppAbility } from '@/infra/permission/ability.factory'
 
 const createCourierAccountBodySchema = z.object({
   name: z.string(),
@@ -19,10 +22,14 @@ type CreateCourierAccountBodySchema = z.infer<typeof createCourierAccountBodySch
 @Controller('/accounts/courier')
 export class CreateCourierAccountController {
 
-  constructor(private registerCourier: RegisterCourierUseCase) {}
+  constructor(private registerCourier: RegisterCourierUseCase) { }
 
   @Post()
   @HttpCode(201)
+  @UseGuards(RolesGuard)
+  @CheckRoles((ability: AppAbility) =>
+    ability.can(Action.CREATE, 'Courier')
+  )
   @UsePipes(new ZodValidationPipe(createCourierAccountBodySchema))
   async handle(@Body() body: CreateCourierAccountBodySchema) {
     const { name, email, cpf, password } = body

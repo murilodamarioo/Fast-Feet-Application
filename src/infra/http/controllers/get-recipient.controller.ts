@@ -2,7 +2,6 @@ import { RecipientNotFoundError } from '@/core/errors/errors/recipient-not-found
 import { GetRecipientUseCase } from '@/domain/delivery/application/uses-cases/get-recipient'
 import { BadRequestException, Controller, Get, HttpCode, InternalServerErrorException, Param } from '@nestjs/common'
 import { RecipientPresenter } from '../presenters/recipient-presenter'
-import { Roles } from '@/infra/permission/roles.decorator'
 
 @Controller('/recipients/:id')
 export class GetRecipientController {
@@ -11,7 +10,7 @@ export class GetRecipientController {
 
   @Get()
   @HttpCode(200)
-  @Roles(['ADMIN'])
+  
   async handle(@Param('id') id: string) {
     const response = await this.getRecipient.execute({
       recipientId: id

@@ -30,7 +30,7 @@ describe('Get courier (E2E)', () => {
     await app.init()
   })
 
-  test('[GET] /couriers/:id', async () => {
+  test('[GET] /couriers/:id - ADMIN', async () => {
     const admin = await adminFactory.makePrismaAdmin()
     const accessToken = jwt.sign({ sub: admin.id.toString() })
 
@@ -51,5 +51,39 @@ describe('Get courier (E2E)', () => {
         cpf: courier.cpf
       })
     })
+  })
+
+  test('[GET] /couriers/:id - COURIER', async () => {
+    const courier = await courierFacotry.makePrismaCourier()
+    const accessToken = jwt.sign({ sub: courier.id.toString() })
+
+    const response = await request(app.getHttpServer())
+      .get(`/couriers/${courier.id.toString()}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+
+    expect(response.statusCode).toBe(200)
+    expect(response.body).toEqual({
+      courier: expect.objectContaining({
+        id: courier.id.toString(),
+        name: courier.name,
+        email: courier.email,
+        cpf: courier.cpf
+      })
+    })
+  })
+
+  test('[GET] /couriers/:id - Forbidden', async () => {
+    const courier = await courierFacotry.makePrismaCourier()
+
+    const courierForbidden = await courierFacotry.makePrismaCourier()
+    const accessToken = jwt.sign({ sub: courierForbidden.id.toString() })
+
+    const response = await request(app.getHttpServer())
+      .get(`/couriers/${courier.id.toString()}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+
+    expect(response.statusCode).toBe(403)
   })
 })
