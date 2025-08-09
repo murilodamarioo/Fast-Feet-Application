@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { DatabaseModule } from '../database/database.module'
 import { CryptographyModule } from '../cryptography/cryptography.module'
+import { PermissionsModule } from '../permission/permissions.module'
 
 import { AuthenticateAdminController } from './controllers/authenticate-admin.controller'
 import { CreateAdminAccountController } from './controllers/create-admin-account.controller'
@@ -43,7 +44,7 @@ import { SetOrderStatusToPendingUseCase } from '@/domain/delivery/application/us
 import { SetOrderStatusToReturnedUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-returned'
 
 @Module({
-  imports: [DatabaseModule, CryptographyModule],
+  imports: [DatabaseModule, CryptographyModule, PermissionsModule],
   controllers: [
     CreateAdminAccountController,
     AuthenticateAdminController,

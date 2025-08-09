@@ -1,13 +1,12 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { envSchema } from './env/env';
-import { AuthModule } from './auth/auth.module';
-import { HttpModule } from './http/htpp.module';
-import { EnvModule } from './env/env.module';
-import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './permission/roles.guard';
-import { DatabaseModule } from './database/database.module';
-import { JwtAuthGuard } from './auth/jwt-auth-guard';
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { envSchema } from './env/env'
+import { AuthModule } from './auth/auth.module'
+import { HttpModule } from './http/htpp.module'
+import { EnvModule } from './env/env.module'
+import { APP_GUARD } from '@nestjs/core'
+import { DatabaseModule } from './database/database.module'
+import { JwtAuthGuard } from './auth/jwt-auth-guard'
 
 @Module({
   imports: [
@@ -21,14 +20,10 @@ import { JwtAuthGuard } from './auth/jwt-auth-guard';
     DatabaseModule
   ],
   providers: [
-        {
+    {
       provide: APP_GUARD,
       useClass: JwtAuthGuard
     },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard
-    },
   ]
 })
-export class AppModule {}
+export class AppModule { }
