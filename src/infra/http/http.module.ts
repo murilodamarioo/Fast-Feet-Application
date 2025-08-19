@@ -22,6 +22,7 @@ import { EditRecipientController } from './controllers/edit-recpient.controller'
 import { GetCourierController } from './controllers/get-courier.controller'
 import { SetOrderStatusToPendingController } from './controllers/set-order-status-to-pending.controller'
 import { SetOrderStatusToReturnedContoller } from './controllers/set-order-status-to-returned.controller'
+import { UploadPhotoController } from './controllers/upload-photo.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
@@ -65,6 +66,7 @@ import { SetOrderStatusToReturnedUseCase } from '@/domain/delivery/application/u
     GetCourierController,
     SetOrderStatusToPendingController,
     SetOrderStatusToReturnedContoller,
+    UploadPhotoController
   ],
   providers: [
     RegisterAdminUseCase,
