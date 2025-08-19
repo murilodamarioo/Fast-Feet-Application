@@ -1,7 +1,12 @@
-import NodeGeocoder from 'node-geocoder'
+import * as NodeGeocoder from "node-geocoder"
 
-const geocoder = NodeGeocoder({
-  provider: 'openstreetmap',
-})
+const options: NodeGeocoder.Options = {
+  provider: "openstreetmap",
+  language: "pt",
+}
+
+const geocoder = (NodeGeocoder as any).default
+  ? (NodeGeocoder as any).default(options)
+  : (NodeGeocoder as any)(options)
 
 export default geocoder

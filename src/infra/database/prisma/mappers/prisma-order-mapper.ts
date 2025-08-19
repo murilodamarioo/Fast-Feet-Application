@@ -31,7 +31,6 @@ export class PrismaOrderMapper {
     }
 
     return Order.create({
-      id: new UniqueEntityId(raw.id),
       orderName: raw.title,
       recipientId: new UniqueEntityId(raw.recipientId),
       courierId: new UniqueEntityId(raw.courierId),
@@ -39,7 +38,7 @@ export class PrismaOrderMapper {
       postedAt: null,
       pickedUp: null,
       deliveredAt: null
-    })
+    }, new UniqueEntityId(raw.id))
   }
 
   static toPrisma(data: Order): Prisma.OrderUncheckedCreateInput {
@@ -67,6 +66,7 @@ export class PrismaOrderMapper {
     }
 
     return {
+      id: data.id.toString(),
       title: data.orderName,
       recipientId: data.recipientId.toString(),
       courierId: data.courierId?.toString(),

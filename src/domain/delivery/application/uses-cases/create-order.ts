@@ -20,7 +20,7 @@ export class CreateOrderUseCase {
   constructor(
     private ordersrepository: OrdersRepository,
     private recipientsRepository: RecipientsRepository
-  ) {}
+  ) { }
 
   async execute({ recipientId, courierId, orderName }: CreateOrderUseCaseRequest): Promise<CreateOrderUseCaseResponse> {
     const recipient = await this.recipientsRepository.findById(recipientId)
@@ -35,7 +35,7 @@ export class CreateOrderUseCase {
       orderName,
       postedAt: null,
       pickedUp: null,
-      deliveredAt: null
+      deliveredAt: null,
     });
 
     await this.ordersrepository.create(order)
