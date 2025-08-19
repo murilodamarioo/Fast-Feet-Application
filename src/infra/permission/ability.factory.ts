@@ -11,7 +11,8 @@ export enum Action {
   PENDING = 'pending',
   PICKUP = 'pickup',
   RETURN = 'return',
-  DELIVER = 'deliver'
+  DELIVER = 'deliver',
+  UPLOAD_PHOTO = 'upload_photo'
 }
 
 export type Subject = 'Courier' | 'Recipient' | 'Order' | 'Admin' | 'all'
@@ -45,6 +46,7 @@ export class AbilityFactory {
       can(Action.READ, 'Order');
       can(Action.PICKUP, 'Order');
       can(Action.DELIVER, 'Order');
+      can(Action.UPLOAD_PHOTO, 'Order');
       cannot(Action.RETURN, 'Order');
     };
 
