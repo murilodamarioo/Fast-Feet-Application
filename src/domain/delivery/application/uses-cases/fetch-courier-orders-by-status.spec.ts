@@ -1,22 +1,27 @@
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { FetchCourierOrdersByStatusUseCase } from './fetch-courier-orders-by-status'
-import { InMemoryCourierRepository } from 'test/repositories/in-memory-courier-reposiotry'
-import { makeCourier } from 'test/factories/make-courier'
-import { makeOrder } from 'test/factories/make-order'
 import { Status } from '@/domain/delivery/enterprise/entities/value-object.ts/Status'
 import { Order } from '@/domain/delivery/enterprise/entities/Order'
+
+import { FetchCourierOrdersByStatusUseCase } from './fetch-courier-orders-by-status'
+
+import { makeOrder } from 'test/factories/make-order'
+import { makeCourier } from 'test/factories/make-courier'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+import { InMemoryCourierRepository } from 'test/repositories/in-memory-courier-reposiotry'
 import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
+import { InMemoryOrderPhotosRepository } from 'test/repositories/in-memory-order-photos-repository'
 
 let sut: FetchCourierOrdersByStatusUseCase
 let inMemoryOrdersRepository: InMemoryOrderRepository
 let inMemoryRecipientRepository: InMemoryRecipientRepository
+let inMemoryOrderPhotosRepository: InMemoryOrderPhotosRepository
 let inMemoryCourierRepository: InMemoryCourierRepository
 
 describe('Fetch Orders by Status', () => {
 
   beforeEach(() => {
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
-    inMemoryOrdersRepository = new InMemoryOrderRepository(inMemoryRecipientRepository)
+    inMemoryOrderPhotosRepository = new InMemoryOrderPhotosRepository()
+    inMemoryOrdersRepository = new InMemoryOrderRepository(inMemoryRecipientRepository, inMemoryOrderPhotosRepository)
     inMemoryCourierRepository = new InMemoryCourierRepository()
     sut = new FetchCourierOrdersByStatusUseCase(inMemoryOrdersRepository, inMemoryCourierRepository)
   })

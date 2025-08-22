@@ -1,23 +1,30 @@
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
-import { SetOrderStatusToDeliveredUseCase } from './set-order-status-to-delivered'
-import { makeCourier } from 'test/factories/make-courier'
-import { makeOrder } from 'test/factories/make-order'
-import { Status } from '@/domain/delivery/enterprise/entities/value-object.ts/Status'
-import { SetOrderStatusError } from '@/core/errors/errors/set-order-status-error'
-import { PhotoNotProvidedError } from '@/core/errors/errors/photo-not-provided-error'
-import { makeRecipient } from 'test/factories/make-recipient'
 import { OrderDeliveryDistanceTooFarError } from '@/core/errors/errors/order-delivery-distance-too-far-error'
+import { PhotoNotProvidedError } from '@/core/errors/errors/photo-not-provided-error'
+import { SetOrderStatusError } from '@/core/errors/errors/set-order-status-error'
+
+import { Status } from '@/domain/delivery/enterprise/entities/value-object.ts/Status'
+
+import { SetOrderStatusToDeliveredUseCase } from './set-order-status-to-delivered'
+
+import { makeOrder } from 'test/factories/make-order'
+import { makeRecipient } from 'test/factories/make-recipient'
+import { makeCourier } from 'test/factories/make-courier'
+import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+import { InMemoryOrderPhotosRepository } from 'test/repositories/in-memory-order-photos-repository'
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 
 let inMemoryOrdersRepository: InMemoryOrderRepository
 let inMemoryRecipientRepository: InMemoryRecipientRepository
+let inMemoryOrderPhotosRepository: InMemoryOrderPhotosRepository
 let sut: SetOrderStatusToDeliveredUseCase
 
 describe('Set order status to delivered', () => {
-  
+
   beforeEach(() => {
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
-    inMemoryOrdersRepository = new InMemoryOrderRepository(inMemoryRecipientRepository)
+    inMemoryOrderPhotosRepository = new InMemoryOrderPhotosRepository()
+    inMemoryOrdersRepository = new InMemoryOrderRepository(inMemoryRecipientRepository, inMemoryOrderPhotosRepository)
     sut = new SetOrderStatusToDeliveredUseCase(inMemoryOrdersRepository, inMemoryRecipientRepository)
   })
 
@@ -119,4 +126,39 @@ describe('Set order status to delivered', () => {
     expect(response.isFailure()).toBeTruthy()
     expect(response.value).toBeInstanceOf(OrderDeliveryDistanceTooFarError)
   })
+
+
+  it('should persist photo attachment when order is delivered', async () => {
+    const courier = makeCourier()
+
+    const recipient = makeRecipient({
+      latitude: -23.5937123,
+      longitude: -46.5802722
+    })
+    inMemoryRecipientRepository.recipients.push(recipient)
+
+    const order = makeOrder({
+      courierId: courier.id,
+      status: Status.PICKED_UP,
+      recipientId: recipient.id
+    })
+
+    await inMemoryOrdersRepository.create(order)
+
+    const response = await sut.execute({
+      orderId: order.id.toString(),
+      photoId: '1',
+      orderLatitude: -23.5937123,
+      orderLongitude: -46.5802722
+    })
+
+    expect(response.isSuccess()).toBeTruthy()
+    expect(inMemoryOrderPhotosRepository.orderPhotos).toHaveLength(1)
+    expect(inMemoryOrderPhotosRepository.orderPhotos).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ photoId: new UniqueEntityId('1') }),
+      ])
+    )
+  })
+  
 })

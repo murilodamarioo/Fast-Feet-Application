@@ -1,20 +1,26 @@
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+import { SetOrderStatusError } from '@/core/errors/errors/set-order-status-error'
+
+import { Status } from '@/domain/delivery/enterprise/entities/value-object.ts/Status'
+
 import { SetOrderStatusToReturnedUseCase } from './set-order-status-to-returned'
+
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
 import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
+import { InMemoryOrderPhotosRepository } from 'test/repositories/in-memory-order-photos-repository'
 import { makeCourier } from 'test/factories/make-courier'
 import { makeOrder } from 'test/factories/make-order'
-import { Status } from '@/domain/delivery/enterprise/entities/value-object.ts/Status'
-import { SetOrderStatusError } from '@/core/errors/errors/set-order-status-error'
 
 let sut: SetOrderStatusToReturnedUseCase
 let inMemoryOrdersRepository: InMemoryOrderRepository
+let inMemoryOrderPhotosRepository: InMemoryOrderPhotosRepository
 let inMemoryRecipientRepository: InMemoryRecipientRepository
 
 describe('Set order status to Returned', () => {
 
   beforeEach(() => {
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
-    inMemoryOrdersRepository = new InMemoryOrderRepository(inMemoryRecipientRepository)
+    inMemoryOrderPhotosRepository = new InMemoryOrderPhotosRepository()
+    inMemoryOrdersRepository = new InMemoryOrderRepository(inMemoryRecipientRepository, inMemoryOrderPhotosRepository)
     sut = new SetOrderStatusToReturnedUseCase(inMemoryOrdersRepository)
   })
 

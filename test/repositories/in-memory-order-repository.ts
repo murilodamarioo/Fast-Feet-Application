@@ -1,15 +1,21 @@
-import { OrdersRepository } from '@/domain/delivery/application/repositories/orders-repository'
-import { Order } from '@/domain/delivery/enterprise/entities/Order'
-import { InMemoryRecipientRepository } from './in-memory-recipient-repository'
-import { OrderDetails } from '@/domain/delivery/enterprise/entities/value-object.ts/order-details'
 import { DomainEvents } from '@/core/events/domain-events'
 import { PaginationParam } from '@/core/repositories/pagination-param'
+import { OrdersRepository } from '@/domain/delivery/application/repositories/orders-repository'
+
+import { Order } from '@/domain/delivery/enterprise/entities/Order'
+import { OrderDetails } from '@/domain/delivery/enterprise/entities/value-object.ts/order-details'
+
+import { InMemoryOrderPhotosRepository } from './in-memory-order-photos-repository'
+import { InMemoryRecipientRepository } from './in-memory-recipient-repository'
 
 export class InMemoryOrderRepository implements OrdersRepository {
 
   public orders: Order[] = []
 
-  constructor(private inMemoryRecipientRepository: InMemoryRecipientRepository) { }
+  constructor(
+    private inMemoryRecipientRepository: InMemoryRecipientRepository,
+    private inMemoryOrderPhotosRepository: InMemoryOrderPhotosRepository
+  ) { }
 
   async findById(id: string): Promise<Order | null> {
     const order = this.orders.find((order) => order.id.toString() === id)
@@ -73,6 +79,10 @@ export class InMemoryOrderRepository implements OrdersRepository {
       return item.id === order.id
     })
 
+    if (order.photo) {
+      await this.inMemoryOrderPhotosRepository.create(order.photo)
+    }
+
     this.orders[orderIndex] = order
   }
 
@@ -80,6 +90,10 @@ export class InMemoryOrderRepository implements OrdersRepository {
     const orderIndex = this.orders.findIndex((item) => {
       return item.id === order.id
     })
+
+    if (order.photo) {
+      await this.inMemoryOrderPhotosRepository.create(order.photo)
+    }
 
     this.orders[orderIndex] = order
 

@@ -1,19 +1,23 @@
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
 import { GetOrderDetailsUseCase } from './get-order-details'
+
 import { makeOrder } from 'test/factories/make-order'
-import { makeCourier } from 'test/factories/make-courier'
-import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
 import { makeRecipient } from 'test/factories/make-recipient'
+import { makeCourier } from 'test/factories/make-courier'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
+import { InMemoryOrderPhotosRepository } from 'test/repositories/in-memory-order-photos-repository'
 
 let sut: GetOrderDetailsUseCase
 let inMemoryRecipientReposiotry: InMemoryRecipientRepository
+let inMemoryOrderPhotosRepository: InMemoryOrderPhotosRepository
 let inMemoryOrdersRepository: InMemoryOrderRepository
 
 describe('Get Order', () => {
 
   beforeEach(() => {
     inMemoryRecipientReposiotry = new InMemoryRecipientRepository()
-    inMemoryOrdersRepository = new InMemoryOrderRepository(inMemoryRecipientReposiotry)
+    inMemoryOrderPhotosRepository = new InMemoryOrderPhotosRepository()
+    inMemoryOrdersRepository = new InMemoryOrderRepository(inMemoryRecipientReposiotry, inMemoryOrderPhotosRepository)
     sut = new GetOrderDetailsUseCase(inMemoryOrdersRepository)
   })
 
