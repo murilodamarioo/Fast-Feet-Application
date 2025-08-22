@@ -19,6 +19,7 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.mts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.873.0",
     "@casl/ability": "^6.7.3",
     "@nestjs/common": "^11.1.6",
     "@nestjs/config": "^4.0.2",
