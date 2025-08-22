@@ -57,6 +57,7 @@ data
 
 # Env
 .env
+.env.test
 
 # Database
 generated

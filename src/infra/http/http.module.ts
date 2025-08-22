@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common'
+
+import { StorageModule } from '../storage/storage.module'
 import { DatabaseModule } from '../database/database.module'
 import { CryptographyModule } from '../cryptography/cryptography.module'
 import { PermissionsModule } from '../permission/permissions.module'
@@ -43,9 +45,10 @@ import { EditRecipientUseCase } from '@/domain/delivery/application/uses-cases/e
 import { GetCourierUseCase } from '@/domain/delivery/application/uses-cases/get-courier'
 import { SetOrderStatusToPendingUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-pending'
 import { SetOrderStatusToReturnedUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-returned'
+import { UploadPhotoUseCase } from '@/domain/delivery/application/uses-cases/upload-photo'
 
 @Module({
-  imports: [DatabaseModule, CryptographyModule, PermissionsModule],
+  imports: [DatabaseModule, CryptographyModule, PermissionsModule, StorageModule],
   controllers: [
     CreateAdminAccountController,
     AuthenticateAdminController,
@@ -87,7 +90,8 @@ import { SetOrderStatusToReturnedUseCase } from '@/domain/delivery/application/u
     EditRecipientUseCase,
     GetCourierUseCase,
     SetOrderStatusToPendingUseCase,
-    SetOrderStatusToReturnedUseCase
+    SetOrderStatusToReturnedUseCase,
+    UploadPhotoUseCase
   ]
 })
 export class HttpModule { }

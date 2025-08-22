@@ -11,6 +11,8 @@ import { PrismaAdminsRepository } from './prisma/repositories/prisma-admins-repo
 import { PrismaOrdersRepository } from './prisma/repositories/prisma-orders-repository'
 import { PrismaRecipientsRepository } from './prisma/repositories/prisma-recipients-repository'
 import { PrismaCouriersRepository } from './prisma/repositories/prisma-couriers-repository'
+import { PhotosRepository } from '@/domain/delivery/application/repositories/photos-repository'
+import { PrismaPhotosRepository } from './prisma/repositories/prisma-photos-repository'
 
 @Module({
   providers: [
@@ -30,6 +32,10 @@ import { PrismaCouriersRepository } from './prisma/repositories/prisma-couriers-
     {
       provide: CouriersRepository,
       useClass: PrismaCouriersRepository
+    },
+    {
+      provide: PhotosRepository,
+      useClass: PrismaPhotosRepository
     }
   ],
   exports: [
@@ -37,7 +43,8 @@ import { PrismaCouriersRepository } from './prisma/repositories/prisma-couriers-
     AdminRepository,
     OrdersRepository,
     RecipientsRepository,
-    CouriersRepository
+    CouriersRepository,
+    PhotosRepository
   ]
 })
-export class DatabaseModule {}
+export class DatabaseModule { }
