@@ -1,14 +1,18 @@
+import { Injectable } from '@nestjs/common'
+
 import { Either, failure, success } from '@/core/either'
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { getDistanceBetweenCoordinates } from '@/core/utils/get-distance-between-coordinates'
 import { OrderNotFoundError } from '@/core/errors/errors/order-not-found-error'
 import { SetOrderStatusError } from '@/core/errors/errors/set-order-status-error'
-import { OrdersRepository } from '../repositories/orders-repository'
+import { PhotoNotProvidedError } from '@/core/errors/errors/photo-not-provided-error'
+
 import { Status, StatusUtils } from '@/domain/delivery/enterprise/entities/value-object.ts/Status'
 import { OrderPhoto } from '@/domain/delivery/enterprise/entities/Order-Photo'
-import { UniqueEntityId } from '@/core/entities/unique-entity-id'
-import { PhotoNotProvidedError } from '@/core/errors/errors/photo-not-provided-error'
-import { getDistanceBetweenCoordinates } from '@/core/utils/get-distance-between-coordinates'
-import { RecipientsRepository } from '../repositories/recipients-repository'
 import { OrderDeliveryDistanceTooFarError } from '@/core/errors/errors/order-delivery-distance-too-far-error'
+
+import { RecipientsRepository } from '../repositories/recipients-repository'
+import { OrdersRepository } from '../repositories/orders-repository'
 
 export interface SetOrderStatusToDeliveredUseCaseRequest {
   orderId: string
@@ -21,17 +25,18 @@ type SetOrderStatusToDeliveredUseCaseResponse = Either<
   OrderNotFoundError | SetOrderStatusError | PhotoNotProvidedError,
   null
 >
+
+@Injectable()
 export class SetOrderStatusToDeliveredUseCase {
 
   constructor(
-    private ordersRepository: OrdersRepository, 
+    private ordersRepository: OrdersRepository,
     private recipientRepository: RecipientsRepository
-  ) {}
+  ) { }
 
   async execute(
     { orderId, photoId, orderLatitude, orderLongitude }: SetOrderStatusToDeliveredUseCaseRequest
   ): Promise<SetOrderStatusToDeliveredUseCaseResponse> {
-    
     const order = await this.ordersRepository.findById(orderId)
 
     if (!order) {

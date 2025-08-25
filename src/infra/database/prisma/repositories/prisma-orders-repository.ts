@@ -1,19 +1,27 @@
 import { Injectable } from '@nestjs/common'
 
-import { OrdersRepository } from '@/domain/delivery/application/repositories/orders-repository'
-import { Order } from '@/domain/delivery/enterprise/entities/Order'
-import { OrderDetails } from '@/domain/delivery/enterprise/entities/value-object.ts/order-details'
-import { PrismaService } from '../prisma.service'
-import { PrismaOrderMapper } from '../mappers/prisma-order-mapper'
-import { RecipientsRepository } from '@/domain/delivery/application/repositories/recipients-repository'
+import { convertStatus } from '@/core/utils/convert-status'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { PaginationParam } from '@/core/repositories/pagination-param'
-import { convertStatus } from '@/core/utils/convert-status'
+
+import { Order } from '@/domain/delivery/enterprise/entities/Order'
+import { OrderDetails } from '@/domain/delivery/enterprise/entities/value-object.ts/order-details'
+import { OrdersRepository } from '@/domain/delivery/application/repositories/orders-repository'
+import { RecipientsRepository } from '@/domain/delivery/application/repositories/recipients-repository'
+import { OrderPhotosRepository } from '@/domain/delivery/application/repositories/order-photos-repository'
+
+import { PrismaOrderMapper } from '../mappers/prisma-order-mapper'
+
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaOrdersRepository implements OrdersRepository {
 
-  constructor(private prisma: PrismaService, private recipientsRepository: RecipientsRepository) { }
+  constructor(
+    private prisma: PrismaService,
+    private recipientsRepository: RecipientsRepository,
+    private orderPhotosRepository: OrderPhotosRepository
+  ) { }
 
   async findById(id: string): Promise<Order | null> {
     const order = await this.prisma.order.findUnique({
@@ -85,23 +93,29 @@ export class PrismaOrdersRepository implements OrdersRepository {
   async save(order: Order): Promise<void> {
     const data = PrismaOrderMapper.toPrisma(order)
 
-    await this.prisma.order.update({
-      where: {
-        id: order.id.toString()
-      },
-      data
-    })
+    await Promise.all([
+      this.prisma.order.update({
+        where: {
+          id: order.id.toString()
+        },
+        data
+      }),
+      order.photo && this.orderPhotosRepository.create(order.photo)
+    ])
   }
 
   async updateStatus(order: Order): Promise<void> {
     const data = PrismaOrderMapper.toPrisma(order)
 
-    await this.prisma.order.update({
-      where: {
-        id: order.id.toString()
-      },
-      data
-    })
+    await Promise.all([
+      this.prisma.order.update({
+        where: {
+          id: order.id.toString()
+        },
+        data
+      }),
+      order.photo && this.orderPhotosRepository.create(order.photo)
+    ])
   }
 
 }

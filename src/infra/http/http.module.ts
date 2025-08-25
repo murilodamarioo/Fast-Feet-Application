@@ -25,6 +25,7 @@ import { GetCourierController } from './controllers/get-courier.controller'
 import { SetOrderStatusToPendingController } from './controllers/set-order-status-to-pending.controller'
 import { SetOrderStatusToReturnedContoller } from './controllers/set-order-status-to-returned.controller'
 import { UploadPhotoController } from './controllers/upload-photo.controller'
+import { SetOrderStatusToDeliveredController } from './controllers/set-order-status-to-delivered.controller'
 
 import { RegisterAdminUseCase } from '@/domain/delivery/application/uses-cases/register-admin'
 import { AuthenticateAdminUseCase } from '@/domain/delivery/application/uses-cases/authenticate-admin'
@@ -46,6 +47,7 @@ import { GetCourierUseCase } from '@/domain/delivery/application/uses-cases/get-
 import { SetOrderStatusToPendingUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-pending'
 import { SetOrderStatusToReturnedUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-returned'
 import { UploadPhotoUseCase } from '@/domain/delivery/application/uses-cases/upload-photo'
+import { SetOrderStatusToDeliveredUseCase } from '@/domain/delivery/application/uses-cases/set-order-status-to-delivered'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, PermissionsModule, StorageModule],
@@ -69,7 +71,8 @@ import { UploadPhotoUseCase } from '@/domain/delivery/application/uses-cases/upl
     GetCourierController,
     SetOrderStatusToPendingController,
     SetOrderStatusToReturnedContoller,
-    UploadPhotoController
+    UploadPhotoController,
+    SetOrderStatusToDeliveredController,
   ],
   providers: [
     RegisterAdminUseCase,
@@ -91,7 +94,8 @@ import { UploadPhotoUseCase } from '@/domain/delivery/application/uses-cases/upl
     GetCourierUseCase,
     SetOrderStatusToPendingUseCase,
     SetOrderStatusToReturnedUseCase,
-    UploadPhotoUseCase
+    UploadPhotoUseCase,
+    SetOrderStatusToDeliveredUseCase
   ]
 })
 export class HttpModule { }
