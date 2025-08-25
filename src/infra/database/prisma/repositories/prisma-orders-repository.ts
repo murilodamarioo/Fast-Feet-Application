@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
+import { DomainEvents } from '@/core/events/domain-events'
 import { convertStatus } from '@/core/utils/convert-status'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { PaginationParam } from '@/core/repositories/pagination-param'
@@ -88,6 +89,8 @@ export class PrismaOrdersRepository implements OrdersRepository {
     await this.prisma.order.create({
       data
     })
+
+    DomainEvents.dispatchEventsForAggregate(order.id)
   }
 
   async save(order: Order): Promise<void> {
@@ -116,6 +119,8 @@ export class PrismaOrdersRepository implements OrdersRepository {
       }),
       order.photo && this.orderPhotosRepository.create(order.photo)
     ])
+
+    DomainEvents.dispatchEventsForAggregate(order.id)
   }
 
 }
