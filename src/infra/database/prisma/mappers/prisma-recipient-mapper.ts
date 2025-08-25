@@ -16,6 +16,8 @@ export class PrismaRecipientMapper {
       address: raw.address,
       neighborhood: raw.neighborhood,
       state: raw.state,
+      latitude: Number(raw.latitude),
+      longitude: Number(raw.longitude),
     }, new UniqueEntityId(raw.id))
   }
 
@@ -30,6 +32,8 @@ export class PrismaRecipientMapper {
       address: data.address,
       neighborhood: data.neighborhood,
       state: data.state,
+      latitude: String(data.latitude),
+      longitude: String(data.longitude)
     }
   }
 
