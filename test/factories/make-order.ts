@@ -7,7 +7,6 @@ import { PrismaOrderMapper } from '@/infra/database/prisma/mappers/prisma-order-
 
 export function makeOrder(override: Partial<OrderProps> = {}, id?: UniqueEntityId) {
   const courier = Order.create({
-    id: id ?? new UniqueEntityId(),
     recipientId: new UniqueEntityId(),
     courierId: new UniqueEntityId(),
     orderName: override.orderName ?? faker.commerce.productName(),
