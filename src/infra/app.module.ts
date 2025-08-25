@@ -7,6 +7,7 @@ import { EnvModule } from './env/env.module'
 import { APP_GUARD } from '@nestjs/core'
 import { DatabaseModule } from './database/database.module'
 import { JwtAuthGuard } from './auth/jwt-auth-guard'
+import { EventsModule } from './events/events.module'
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { JwtAuthGuard } from './auth/jwt-auth-guard'
     AuthModule,
     HttpModule,
     EnvModule,
-    DatabaseModule
+    EventsModule
   ],
   providers: [
     {

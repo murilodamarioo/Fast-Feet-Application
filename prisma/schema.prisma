@@ -25,18 +25,19 @@ model User {
 }
 
 model Recipient {
-  id           String  @id @default(uuid())
-  name         String
-  cpf          String
-  email        String  @unique
-  phone        String
-  zipCode      String  @map("zip_code")
-  address      String
-  neighborhood String
-  state        String
-  latitude     String?
-  longitude    String?
-  orders       Order[]
+  id            String         @id @default(uuid())
+  name          String
+  cpf           String
+  email         String         @unique
+  phone         String
+  zipCode       String         @map("zip_code")
+  address       String
+  neighborhood  String
+  state         String
+  latitude      String?
+  longitude     String?
+  orders        Order[]
+  notifications Notification[]
 
   @@map("recipients")
 }
@@ -77,4 +78,17 @@ model Photo {
   order Order? @relation(fields: [orderId], references: [id])
 
   @@map("photos")
+}
+
+model Notification {
+  id          String    @id @default(uuid())
+  recipientId String
+  title       String
+  content     String
+  readAt      DateTime? @map("read_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  recipient Recipient @relation(fields: [recipientId], references: [id])
+
+  @@map("notifications")
 }

@@ -1,21 +1,26 @@
+import { Injectable } from '@nestjs/common'
+
 import { DomainEvents } from '@/core/events/domain-events'
 import { EventHandler } from '@/core/events/event-handler'
+
 import { OrdersRepository } from '@/domain/delivery/application/repositories/orders-repository'
 import { ChangeStatusEvent } from '@/domain/delivery/enterprise/events/change-status-event'
+
 import { SendNotificationUseCase } from '../application/use-cases/send-notification'
 
+@Injectable()
 export class OnStatusChanged implements EventHandler {
-  
+
   constructor(
     private ordersRepository: OrdersRepository,
-    private sendNotification:SendNotificationUseCase
+    private sendNotification: SendNotificationUseCase
   ) {
     this.setupSubscriptions()
   }
 
   setupSubscriptions(): void {
     DomainEvents.register(
-      this.sendNewStatusNotification.bind(this), 
+      this.sendNewStatusNotification.bind(this),
       ChangeStatusEvent.name
     )
   }

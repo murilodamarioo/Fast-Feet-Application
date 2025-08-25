@@ -1,15 +1,20 @@
-import { makeOrder } from 'test/factories/make-order'
-import { OnStatusChanged } from './on-status-changed'
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
-import { Status } from '@/domain/delivery/enterprise/entities/value-object.ts/Status'
 import { SendNotificationUseCase } from '../application/use-cases/send-notification'
-import { InMemoryNotificationsRepository } from 'test/repositories/in-memory-notifications-repository'
-import { MockInstance } from 'vitest'
+import { OnStatusChanged } from './on-status-changed'
+
+import { Status } from '@/domain/delivery/enterprise/entities/value-object.ts/Status'
+
 import { waitFor } from 'test/utils/wait-for'
+import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+import { InMemoryNotificationsRepository } from 'test/repositories/in-memory-notifications-repository'
+import { InMemoryOrderPhotosRepository } from 'test/repositories/in-memory-order-photos-repository'
+import { makeOrder } from 'test/factories/make-order'
+
+import { MockInstance } from 'vitest'
 
 let inMemoryOrderRepository: InMemoryOrderRepository
 let inMemoryRecipientRepository: InMemoryRecipientRepository
+let inMemoryOrderPhotosRepository: InMemoryOrderPhotosRepository
 let inMemoryNotificationRepository: InMemoryNotificationsRepository
 let sendNotification: SendNotificationUseCase
 
@@ -22,7 +27,8 @@ describe('On status changed', () => {
     inMemoryNotificationRepository = new InMemoryNotificationsRepository()
     sendNotification = new SendNotificationUseCase(inMemoryNotificationRepository)
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
-    inMemoryOrderRepository = new InMemoryOrderRepository(inMemoryRecipientRepository)
+    inMemoryOrderPhotosRepository = new InMemoryOrderPhotosRepository()
+    inMemoryOrderRepository = new InMemoryOrderRepository(inMemoryRecipientRepository, inMemoryOrderPhotosRepository)
 
     sendNotificationExecuteSpy = vi.spyOn(sendNotification, 'execute')
 
