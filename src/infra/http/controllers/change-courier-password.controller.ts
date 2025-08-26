@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, HttpCode, Param, Put, UseGuards } from '@nestjs/common'
+import { BadRequestException, Body, Controller, HttpCode, NotFoundException, Param, Put, UseGuards } from '@nestjs/common'
 import z from 'zod'
 
 import { CourierNotFoundError } from '@/core/errors/errors/courier-not-found-error'
@@ -6,6 +6,7 @@ import { ChangeCourierPasswordUseCase } from '@/domain/delivery/application/uses
 import { CheckRoles } from '@/infra/permission/roles.decorator'
 import { RolesGuard } from '@/infra/permission/roles.guard'
 import { Action, AppAbility } from '@/infra/permission/ability.factory'
+import { ApiBearerAuth, ApiBody, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
 const changeCourierPasswordBodySchema = z.object({
   password: z.string()
@@ -13,6 +14,8 @@ const changeCourierPasswordBodySchema = z.object({
 
 type ChangeCourierPasswordBodySchema = z.infer<typeof changeCourierPasswordBodySchema>
 
+@ApiBearerAuth()
+@ApiTags('accounts')
 @Controller('/courier/:courierId/change-password')
 export class ChangeCourierPasswordController {
 
@@ -24,6 +27,24 @@ export class ChangeCourierPasswordController {
   @CheckRoles((ability: AppAbility) =>
     ability.can(Action.UPDATE, 'Courier')
   )
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        password: { type: 'string', example: 'newP@ssw0rd' }
+      },
+      required: ['password']
+    }
+  })
+  @ApiOkResponse({ description: 'Password has changed successfully' })
+  @ApiNotFoundResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string', example: 'Courier not found' }
+      }
+    }
+  })
   async handle(
     @Body() body: ChangeCourierPasswordBodySchema,
     @Param('courierId') courierId: string
@@ -40,7 +61,7 @@ export class ChangeCourierPasswordController {
 
       switch (error.constructor) {
         case CourierNotFoundError:
-          throw new BadRequestException(error.message)
+          throw new NotFoundException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

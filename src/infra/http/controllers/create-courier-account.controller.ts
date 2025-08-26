@@ -9,6 +9,7 @@ import { RegisterCourierUseCase } from '@/domain/delivery/application/uses-cases
 import { RolesGuard } from '@/infra/permission/roles.guard'
 import { CheckRoles } from '@/infra/permission/roles.decorator'
 import { Action, AppAbility } from '@/infra/permission/ability.factory'
+import { ApiBearerAuth, ApiBody, ApiConflictResponse, ApiCreatedResponse, ApiTags } from '@nestjs/swagger'
 
 const createCourierAccountBodySchema = z.object({
   name: z.string(),
@@ -19,6 +20,8 @@ const createCourierAccountBodySchema = z.object({
 
 type CreateCourierAccountBodySchema = z.infer<typeof createCourierAccountBodySchema>
 
+@ApiBearerAuth()
+@ApiTags('accounts')
 @Controller('/accounts/courier')
 export class CreateCourierAccountController {
 
@@ -31,6 +34,27 @@ export class CreateCourierAccountController {
     ability.can(Action.CREATE, 'Courier')
   )
   @UsePipes(new ZodValidationPipe(createCourierAccountBodySchema))
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', example: 'Jane Doe' },
+        email: { type: 'string', example: 'jane@gmail.com' },
+        cpf: { type: 'string', example: '12345678910' },
+        password: { type: 'string', example: 'P@ssw0rd' }
+      },
+      required: ['name', 'cpf', 'email', 'password']
+    }
+  })
+  @ApiCreatedResponse({ description: 'Courier created successfully' })
+  @ApiConflictResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string', example: 'User with the same CPF already exists' }
+      }
+    }
+  })
   async handle(@Body() body: CreateCourierAccountBodySchema) {
     const { name, email, cpf, password } = body
 
