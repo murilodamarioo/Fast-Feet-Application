@@ -4,7 +4,7 @@ import { Status } from '@/domain/delivery/enterprise/entities/value-object.ts/St
 export class SetOrderStatusError extends Error implements UseCaseError {
   constructor(fromStatus: Status, toStatus: Status) {
     super(
-      `Impossible to change to ${toStatus}, because the status is no longer ${fromStatus}`
+      `Impossible to change order status from ${fromStatus} to ${toStatus}`
     )
   }
 }
