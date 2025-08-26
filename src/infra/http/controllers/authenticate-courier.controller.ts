@@ -1,4 +1,5 @@
 import { BadRequestException, Body, Post, UnauthorizedException, UsePipes, HttpCode, Controller } from '@nestjs/common'
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
 
 import { z } from 'zod'
 
@@ -15,15 +16,45 @@ const authenticateBodySchema = z.object({
 
 type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 
+@ApiTags('auth')
 @Controller('/sessions/couriers')
 @Public()
 export class AuthenticateCourierController {
 
-  constructor(private authenticateCourier: AuthenticateCourierUseCase) {}
+  constructor(private authenticateCourier: AuthenticateCourierUseCase) { }
 
   @Post()
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(authenticateBodySchema))
+  @ApiOperation({ summary: 'Authenticate a Courier user' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        cpf: { type: 'string', example: '12345678910' },
+        password: { type: 'string', example: 'newP@ssw0rd' },
+      },
+      required: ['cpf', 'password'],
+    }
+  })
+  @ApiCreatedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        access_token: { type: 'string' }
+      }
+    },
+    description: 'Admin authenticated successfully.'
+  })
+  @ApiUnauthorizedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string', example: 'Credentials are not valid.' },
+      }
+    },
+    description: 'Credentials are not valid.'
+  })
   async handle(@Body() body: AuthenticateBodySchema) {
     const { cpf, password } = body
 
@@ -47,5 +78,5 @@ export class AuthenticateCourierController {
 
     return { access_token }
   }
-  
+
 }
