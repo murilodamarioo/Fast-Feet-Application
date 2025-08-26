@@ -6,7 +6,7 @@ import { ChangeCourierPasswordUseCase } from '@/domain/delivery/application/uses
 import { CheckRoles } from '@/infra/permission/roles.decorator'
 import { RolesGuard } from '@/infra/permission/roles.guard'
 import { Action, AppAbility } from '@/infra/permission/ability.factory'
-import { ApiBearerAuth, ApiBody, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiBody, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger'
 
 const changeCourierPasswordBodySchema = z.object({
   password: z.string()
@@ -27,6 +27,13 @@ export class ChangeCourierPasswordController {
   @CheckRoles((ability: AppAbility) =>
     ability.can(Action.UPDATE, 'Courier')
   )
+  @ApiParam({
+    name: 'courierId',
+    description: 'Courier Id',
+    type: 'string',
+    format: 'uuid',
+    example: 'a1b2c3d4-e5f6-7890-1234-567890abcdef'
+  })
   @ApiBody({
     schema: {
       type: 'object',
