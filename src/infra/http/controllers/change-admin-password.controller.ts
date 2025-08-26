@@ -18,7 +18,7 @@ const changeAdminPasswordBodySchema = z.object({
 
 type ChangeAdminPasswordBodySchema = z.infer<typeof changeAdminPasswordBodySchema>
 
-ApiBearerAuth()
+@ApiBearerAuth()
 @ApiTags('accounts')
 @Controller('/accounts/admin/change-password')
 export class ChangeAdminPasswordController {
