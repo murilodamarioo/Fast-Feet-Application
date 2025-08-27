@@ -2,6 +2,6 @@ import { UseCaseError } from '@/core/errors/use-case-error'
 
 export class InvalidAttachementTypeError extends Error implements UseCaseError {
   constructor(type: string) {
-    super(`File type ${type} is not allowed`)
+    super(`File type ${type} is not supported`)
   }
 }
