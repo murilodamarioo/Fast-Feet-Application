@@ -16,7 +16,7 @@ type ChangeCourierPasswordBodySchema = z.infer<typeof changeCourierPasswordBodyS
 
 @ApiBearerAuth()
 @ApiTags('accounts')
-@Controller('/courier/:courierId/change-password')
+@Controller('/accounts/:courierId/change-password')
 export class ChangeCourierPasswordController {
 
   constructor(private changeCourierPassword: ChangeCourierPasswordUseCase) { }

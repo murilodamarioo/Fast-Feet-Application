@@ -36,7 +36,7 @@ describe('Change courier password (E2E)', () => {
     await app.init()
   })
 
-  test('[PUT] /courier/:courierId/change-password', async () => {
+  test('[PUT] /accounts/:courierId/change-password', async () => {
     const admin = await adminFactory.makePrismaAdmin()
     const accessToken = jwt.sign({ sub: admin.id.toString() })
 
@@ -46,9 +46,9 @@ describe('Change courier password (E2E)', () => {
     const courierId = courier.id.toString()
 
     const newPassword = 'w7r23r%fyq2@'
-    
+
     const response = await request(app.getHttpServer())
-      .put(`/courier/${courierId}/change-password`)
+      .put(`/accounts/${courierId}/change-password`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         password: newPassword
@@ -63,11 +63,11 @@ describe('Change courier password (E2E)', () => {
     })
 
     const passwordMatches = await compare(newPassword, courierOnDatabase!.password)
-    
+
     expect(passwordMatches).toBeTruthy()
   })
 
-  test('[PUT] /courier/:courierId/change-password - Forbidden', async () => {
+  test('[PUT] /accounts/:courierId/change-password - Forbidden', async () => {
     const courier = await courierFactory.makePrismaCourier()
     const courierId = courier.id.toString()
 
@@ -76,7 +76,7 @@ describe('Change courier password (E2E)', () => {
     const newPassword = 'w7r23r%fyq2@'
 
     const response = await request(app.getHttpServer())
-      .put(`/courier/${courierId}/change-password`)
+      .put(`/accounts/${courierId}/change-password`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         password: newPassword
