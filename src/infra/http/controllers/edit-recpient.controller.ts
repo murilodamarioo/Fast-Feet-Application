@@ -1,6 +1,9 @@
+import { Body, Controller, HttpCode, InternalServerErrorException, NotFoundException, Param, Put, UseGuards } from '@nestjs/common'
+import { ApiBearerAuth, ApiBody, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger'
+
 import { RecipientNotFoundError } from '@/core/errors/errors/recipient-not-found-error'
+
 import { EditRecipientUseCase } from '@/domain/delivery/application/uses-cases/edit-recipient'
-import { BadRequestException, Body, Controller, HttpCode, InternalServerErrorException, Param, Put, UseGuards } from '@nestjs/common'
 
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
@@ -24,6 +27,8 @@ type EditRecipientBodySchema = z.infer<typeof editRecipientBodySchema>
 
 const bodyValidationPipe = new ZodValidationPipe(editRecipientBodySchema)
 
+@ApiBearerAuth()
+@ApiTags('recipient')
 @Controller('/recpients/:id')
 export class EditRecipientController {
 
@@ -35,6 +40,39 @@ export class EditRecipientController {
   @CheckRoles((ability: AppAbility) =>
     ability.can(Action.UPDATE, 'Recipient')
   )
+  @ApiParam({
+    name: 'id',
+    description: 'Recipient Id',
+    type: 'string',
+    format: 'uuid',
+    example: 'a1b2c3d4-e5f6-7890-1234-567890abcdef',
+    required: true
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', example: 'John Doe' },
+        cpf: { type: 'string', example: '12345678910' },
+        email: { type: 'string', example: 'john@gmail.com' },
+        phone: { type: 'string', example: '(11)953423455' },
+        zipCode: { type: 'string', example: 'NW1 6XE' },
+        address: { type: 'string', example: '221B Baker Street' },
+        neighborhood: { type: 'string', example: 'Marylebone' },
+        state: { type: 'string', example: 'London' }
+      }
+    }
+  })
+  @ApiOkResponse({ description: 'Recipient updated successfully' })
+  @ApiNotFoundResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'number', example: 404 },
+        message: { type: 'string', example: 'Recipient not found' }
+      }
+    }
+  })
   async handle(
     @Param('id') id: string,
     @Body(bodyValidationPipe) body: EditRecipientBodySchema
@@ -58,7 +96,7 @@ export class EditRecipientController {
 
       switch (error.constructor) {
         case RecipientNotFoundError:
-          throw new BadRequestException(error.message)
+          throw new NotFoundException(error.message)
         default:
           throw new InternalServerErrorException(error.message)
       }
