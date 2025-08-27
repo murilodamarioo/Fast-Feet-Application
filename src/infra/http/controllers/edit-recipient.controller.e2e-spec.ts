@@ -38,7 +38,7 @@ describe('Edit recipient (E2E)', () => {
     await app.init()
   })
 
-  test('[PUT] /recpients/:id', async () => {
+  test('[PUT] /recpients/:id/edit', async () => {
     const admin = await adminFactory.makePrismaAdmin()
     const accessToken = jwt.sign({ sub: admin.id.toString() })
 
@@ -46,7 +46,7 @@ describe('Edit recipient (E2E)', () => {
     const recpientId = recipient.id.toString()
 
     const response = await request(app.getHttpServer())
-      .put(`/recpients/${recpientId}`)
+      .put(`/recpients/${recpientId}/edit`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         name: 'John Doe',
@@ -77,7 +77,7 @@ describe('Edit recipient (E2E)', () => {
     })
   })
 
-  test('[PUT] /recpients/:id - Forbidden', async () => {
+  test('[PUT] /recpients/:id/edit - Forbidden', async () => {
     const courier = await courierFactory.makePrismaCourier()
     const accessToken = jwt.sign({ sub: courier.id.toString() })
 
@@ -85,7 +85,7 @@ describe('Edit recipient (E2E)', () => {
     const recpientId = recipient.id.toString()
 
     const response = await request(app.getHttpServer())
-      .put(`/recpients/${recpientId}`)
+      .put(`/recpients/${recpientId}/edit`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         name: 'John Doe',

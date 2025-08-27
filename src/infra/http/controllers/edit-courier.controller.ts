@@ -1,7 +1,10 @@
-import { BadRequestException, Body, Controller, HttpCode, Param, Put, UseGuards, UsePipes } from '@nestjs/common'
+import { BadRequestException, Body, Controller, HttpCode, NotFoundException, Param, Put, UseGuards, UsePipes } from '@nestjs/common'
+import { ApiBearerAuth, ApiBody, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
+
 import { z } from 'zod'
 
 import { CourierNotFoundError } from '@/core/errors/errors/courier-not-found-error'
+
 import { EditCourierUseCase } from '@/domain/delivery/application/uses-cases/edit-courier'
 
 import { RolesGuard } from '@/infra/permission/roles.guard'
@@ -16,7 +19,9 @@ const editCourierBodySchema = z.object({
 
 type EditCourierBodySchema = z.infer<typeof editCourierBodySchema>
 
-@Controller('/accounts/courier/:id')
+@ApiBearerAuth()
+@ApiTags('courier')
+@Controller('couriers/:id/edit')
 export class EditCourierController {
 
   constructor(private editCourier: EditCourierUseCase) { }
@@ -27,6 +32,25 @@ export class EditCourierController {
   @CheckRoles((ability) =>
     ability.can(Action.UPDATE, 'Courier')
   )
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', example: 'John Doe' },
+        cpf: { type: 'string', example: '12345678910' },
+        password: { type: 'string', }
+      }
+    }
+  })
+  @ApiOkResponse({ description: 'Courier edited successfully' })
+  @ApiNotFoundResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string', example: 'Courier not found' }
+      }
+    }
+  })
   async handle(
     @Body() body: EditCourierBodySchema,
     @Param('id') id: string
@@ -45,7 +69,7 @@ export class EditCourierController {
 
       switch (error.constructor) {
         case CourierNotFoundError:
-          throw new BadRequestException(error.message)
+          throw new NotFoundException(error.message)
         default:
           throw new BadRequestException(error.message)
       }

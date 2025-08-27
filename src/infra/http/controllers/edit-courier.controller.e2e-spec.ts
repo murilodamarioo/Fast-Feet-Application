@@ -30,7 +30,7 @@ describe('Edit courier (E2E)', () => {
     await app.init()
   })
 
-  test('[PUT] /accounts/courier/:id', async () => {
+  test('[PUT] couriers/:id/edit', async () => {
     const courier = await courierFactory.makePrismaCourier({
       email: 'john@gmail.com'
     })
@@ -40,7 +40,7 @@ describe('Edit courier (E2E)', () => {
     const accessToken = jwt.sign({ sub: courier.id.toString() })
 
     const response = await request(app.getHttpServer())
-      .put(`/accounts/courier/${courierId}`)
+      .put(`/couriers/${courierId}/edit`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         name: 'John Doe',
@@ -59,7 +59,7 @@ describe('Edit courier (E2E)', () => {
     expect(courierOnDatase).toBeTruthy()
   })
 
-  test('[PUT] /accounts/courier/:id - Forbidden', async () => {
+  test('[PUT] /courier/:id/edit - Forbidden', async () => {
     const courier = await courierFactory.makePrismaCourier({
       email: 'john@gmail.com'
     })
@@ -69,7 +69,7 @@ describe('Edit courier (E2E)', () => {
     const accessToken = jwt.sign({ sub: courierForbidden.id.toString() })
 
     const response = await request(app.getHttpServer())
-      .put(`/accounts/courier/${courierOneId}`)
+      .put(`/couriers/${courierOneId}/edit`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         name: 'John Doe',

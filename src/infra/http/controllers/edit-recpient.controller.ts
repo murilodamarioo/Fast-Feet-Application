@@ -29,7 +29,7 @@ const bodyValidationPipe = new ZodValidationPipe(editRecipientBodySchema)
 
 @ApiBearerAuth()
 @ApiTags('recipient')
-@Controller('/recpients/:id')
+@Controller('/recpients/:id/edit')
 export class EditRecipientController {
 
   constructor(private editRecipient: EditRecipientUseCase) { }
