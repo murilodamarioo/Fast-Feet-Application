@@ -59,7 +59,7 @@ describe('Set order status to picked up (E2E)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
-    expect(response.status).toBe(200)
+    expect(response.status).toBe(204)
 
     const orderOnDatabase = await prisma.order.findUnique({
       where: {

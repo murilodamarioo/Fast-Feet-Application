@@ -13,6 +13,7 @@ import { CheckRoles } from '@/infra/permission/roles.decorator'
 import { Action, AppAbility } from '@/infra/permission/ability.factory'
 
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+import { ApiBadRequestResponse, ApiBearerAuth, ApiNoContentResponse, ApiParam, ApiTags } from '@nestjs/swagger'
 
 const deliverOrderBodySchema = z.object({
   photoId: z.string(),
@@ -28,6 +29,8 @@ type DeliverOrderBodySchema = z.infer<typeof deliverOrderBodySchema>
 
 const bodyValidationPipe = new ZodValidationPipe(deliverOrderBodySchema)
 
+@ApiBearerAuth()
+@ApiTags('order')
 @Controller('/orders/:id/deliver')
 export class SetOrderStatusToDeliveredController {
 
@@ -39,6 +42,44 @@ export class SetOrderStatusToDeliveredController {
   @CheckRoles((ability: AppAbility) =>
     ability.can(Action.DELIVER, 'Order')
   )
+  @ApiParam({
+    name: 'id',
+    description: 'Order Id',
+    type: 'string',
+    format: 'uuid',
+    example: 'a1b2c3d4-e5f6-7890-1234-567890abcdef'
+  })
+  @ApiNoContentResponse({ description: 'Order status successfully delivered' })
+  @ApiBadRequestResponse({
+    description: 'Invalid request',
+    content: {
+      'application/json': {
+        examples: {
+          SetOrderStatusError: {
+            summary: 'Cannot change status',
+            value: {
+              statusCode: 400,
+              message: 'Impossible to change order status from DELIVERED to PENDING',
+            },
+          },
+          OrderDeliveryDistanceTooFarError: {
+            summary: 'Order too far',
+            value: {
+              statusCode: 400,
+              message: 'Delivery cannot be completed: the distance to the recipient exceeds the allowed limit.',
+            },
+          },
+          PhotoNotProvidedError: {
+            summary: 'Photo missing',
+            value: {
+              statusCode: 400,
+              message: 'Photo is required',
+            },
+          },
+        },
+      },
+    },
+  })
   async handle(
     @Param('id') id: string,
     @Body(bodyValidationPipe) body: DeliverOrderBodySchema,
